@@ -7,19 +7,10 @@ import 'quill/dist/quill.snow.css'
 // 로직 호출 (반드시 최상단에서)
 const { remoteMice, initEditor } = useEditorSocket()
 
-// const saveForm = reactive({
-//   name: '',
-//   password: '',
-// })
-
 onMounted(() => {
   // 실제 DOM이 렌더링된 후 에디터 초기화
   initEditor('#editor')
 })
-const save = async () => {
-  const res = await api.save(saveForm)
-  console.log('Signup.vue에서 res 변수 : ', res)
-}
 </script>
 
 <template>

@@ -4,6 +4,16 @@ import Sidebar from '../components/Sidebar.vue'
 import Header from '../components/Header.vue'
 import Chat from '@/components/Chat.vue'
 const isChatOpen = ref(false)
+
+// 2. 서버에서 가져오기 (GET)
+const loadContent = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/posts/1'); // 1번 게시글 예시
+    content.value = response.data.content;
+  } catch (error) {
+    console.error('불러오기 실패:', error);
+  }
+}
 </script>
 
 <template>

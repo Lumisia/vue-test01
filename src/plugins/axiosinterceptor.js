@@ -5,6 +5,13 @@ const api = axios.create({
   timeout: 5000,
 })
 
+const postApi = axios.create({
+  baseURL: '/api', // 서버 기본 주소
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 api.interceptors.request.use(
   (config) => {
     console.log('요청 보내기 전에 실행')
@@ -26,6 +33,7 @@ api.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
 // 1. DB에 저장하기 (Save)
 const saveDocument = async (docId) => {
   if (!quill) return
@@ -58,4 +66,4 @@ const loadDocument = async (docId) => {
   }
 }
 
-export default api
+export default { api, postApi }
