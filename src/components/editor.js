@@ -1,12 +1,22 @@
-import { ref, watch, onUnmounted, reactive } from 'vue'
-import { useMouse } from '@vueuse/core'
+import { ref, onUnmounted, computed } from 'vue'
 import Quill from 'quill'
 import postApi from '@/api/postApi'
 
+// Yjs 관련 임포트
+import * as Y from 'yjs'
+import { WebsocketProvider } from 'y-websocket'
+import { QuillBinding } from 'y-quill'
+import QuillCursors from 'quill-cursors'
+
+Quill.register('modules/cursors', QuillCursors)
+
 let quill = null
+// Yjs 관련 인스턴스를 전역 변수처럼 관리 (cleanup을 위해)
+let ydoc = null
+let provider = null
+let binding = null
 
 export function useEditorSocket() {
-  const remoteMice = ref({})
   //   const senderId = Math.floor(Math.random() * 9) + 1
   //   const myColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
   const colorPalette = [
@@ -22,13 +32,8 @@ export function useEditorSocket() {
     '#ADFF2F', // 연두 (10번)
   ]
   const myNumber = Math.floor(Math.random() * 10) + 1 // 1~10
-  const senderId = myNumber
-  const myColor = colorPalette[myNumber - 1]
-
-  let socket = null
-  let editorChangeFromRemote = false
-
-  const { x, y } = useMouse()
+  const myColor = colorPalette[myNumber]
+  const myName = `User ${myNumber+1}`
 
   // 에디터 및 소켓 초기화 함수 (onMounted 제거됨)
   const initEditor = (elementId) => {
@@ -37,6 +42,7 @@ export function useEditorSocket() {
       theme: 'snow',
       placeholder: '내용을 입력하세요...',
       modules: {
+        cursors: true,
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'],
           ['blockquote', 'code-block'],
@@ -51,71 +57,55 @@ export function useEditorSocket() {
     })
 
     // 2. 소켓 연결
-    socket = new WebSocket('wss://www.cheeseduck.kro.kr:443/ws/chat')
+    ydoc = new Y.Doc()
 
-    socket.onopen = () => console.log('Connected to WebSocket')
+    const roomName = 'quill - demo - room'
+    provider = new WebsocketProvider(
+      'ws://localhost:1234', // 접속할 Yjs 웹소켓 서버 주소
+      roomName,
+      ydoc
+    )
 
-    socket.onmessage = (event) => {
-      const recv = JSON.parse(event.data)
-      const payload = JSON.parse(recv.payload)
-      const recvSenderId = payload.senderId
-      const delta = payload.delta
+    // 4. 공유할 텍스트 타입 정의
+    const ytext = ydoc.getText('quill')
 
-      if (delta && delta.ops) {
-        if (senderId !== recvSenderId && quill) {
-          editorChangeFromRemote = true
-          quill.updateContents(delta)
-          editorChangeFromRemote = false
-        }
-      } else if (payload.left !== undefined) {
-        remoteMice.value[recvSenderId] = {
-          senderId: recvSenderId,
-          color: payload.color,
-          left: payload.left,
-          top: payload.top,
-        }
-      }
-    }
+    // 5. Quill과 Yjs 바인딩 (연결)
+    // 이 한 줄이 에디터 내용 변경 감지, 타인 변경사항 반영, 커서 표시를 모두 자동화합니다.
+    binding = new QuillBinding(ytext, quill, provider.awareness)
 
-    // 3. 에디터 이벤트 등록
-    quill.on('text-change', (delta, source) => {
-      if (source === 'user' && !editorChangeFromRemote && socket?.readyState === WebSocket.OPEN) {
-        isFormValid
-        socket.send(JSON.stringify({ senderId, delta }))
-      }
+    // 6. 내 사용자 정보(Awareness) 설정
+    // 다른 사람들에게 내 커서 색상과 이름을 알려줍니다.
+    provider.awareness.setLocalStateField('user', {
+      name: myName,
+      color: myColor,
+    })
+
+    // 'connected' or 'disconnected'
+    provider.on('status', event => {
+      console.log('Websocket connection status:', event.status)
     })
   }
 
-  // 내 마우스 위치 전송
-  watch([x, y], ([newX, newY]) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(
-        JSON.stringify({
-          senderId,
-          color: myColor,
-          left: newX,
-          top: newY,
-        }),
-      )
-    }
-  })
   const getQuill = () => quill
 
-  // 컴포넌트 언마운트 시 소켓 정리
+  // 컴포넌트 언마운트 시 연결 해제 및 메모리 정리
   onUnmounted(() => {
-    if (socket) socket.close()
+    if (binding) binding.destroy()
+    if (provider) provider.disconnect()
+    if (ydoc) ydoc.destroy()
+    quill = null
   })
 
   return {
-    remoteMice,
     initEditor,
     getQuill,
   }
 }
-export function save() {
-  const title = ref('')
 
-  const isFormValid = reactive(() => {
+export function save() {
+  let title = ref('')
+
+  const isFormValid = computed(() => {
     const hasTitle = title.value.trim().length > 0
     const has_content = quill ? quill.getText().trim().length > 0 : false
     return hasTitle && has_content
@@ -139,6 +129,28 @@ export function save() {
       console.error('저장 실패:', err)
     }
   }
+
+  // // 2. 제목(Title) 동기화 설정
+  //   const ytitle = ydoc.getText('title-content')
+
+  //   // [A] 다른 사람이 제목을 수정했을 때 -> 내 화면의 title 변수 업데이트
+  //   ytitle.observe(event => {
+  //     // 무한 루프 방지를 위해 값이 다를 때만 업데이트
+  //     if (title_event.value !== ytitle.toString()) {
+  //       title_event.value = ytitle.toString()
+  //     }
+  //   })
+
+  //   // [B] 내가 제목을 입력했을 때 -> Yjs 공유 데이터 업데이트
+  //   // 컴포넌트에서 title 변수를 v-model로 연결했다고 가정합니다.
+  //   watch(title, (newTitle) => {
+  //     if (newTitle !== ytitle.toString()) {
+  //       ydoc.transact(() => {
+  //         ytitle.delete(0, ytitle.length)
+  //         ytitle.insert(0, newTitle)
+  //       })
+  //     }
+  //   })
 
   return {
     title,

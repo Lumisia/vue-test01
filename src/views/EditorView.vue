@@ -4,7 +4,7 @@ import { useEditorSocket, save } from '@/components/editor' // 경로 확인하�
 import 'quill/dist/quill.snow.css'
 
 // 로직 호출 (반드시 최상단에서)
-const { remoteMice, initEditor } = useEditorSocket()
+const { title_event, initEditor } = useEditorSocket()
 const { title, isFormValid, savePost } = save()
 
 onMounted(() => {
@@ -17,7 +17,7 @@ onMounted(() => {
   <div class="max-w-4xl mx-auto p-6 space-y-4">
     <div class="flex items-end justify-between border-b border-gray-200 pb-2">
       <input
-        v-model="title"
+        v-model="title_event"
         type="text"
         placeholder="제목을 입력하세요"
         class="w-full text-4xl font-bold outline-none placeholder:text-gray-300 bg-transparent"
