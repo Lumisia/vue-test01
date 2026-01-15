@@ -121,19 +121,6 @@ export function save() {
     return hasTitle && has_content
   })
 
-  // const savePost = async () => {
-  //   try {
-  //     const payload = {
-  //       title: title.value,
-  //       content: quill.root.innerHTML,
-  //     }
-  //     await postApi.savePost('/posts', payload)
-  //     alert('저장되었습니다!')
-  //   } catch (error) {
-  //     console.error('에러 발생:', error)
-  //   }
-  // }
-
   // 1. DB에 저장하기 (Save)
   const savePost = async () => {
     if (!quill) return
