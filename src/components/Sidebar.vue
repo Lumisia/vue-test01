@@ -145,3 +145,20 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
     </nav>
   </aside>
 </template>
+
+<style>
+  /* + 버튼 스타일 */
+.add-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s;
+}
+
+.add-btn:hover {
+  color: #333; /* 마우스 올렸을 때 진해짐 */
+}
+</style>

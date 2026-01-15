@@ -2,7 +2,7 @@ import api from '@/plugins/axiosinterceptor'
 
 const signup = async (req) => {
   const res = await api.post('/user/join', req)
-
+  console.log(api)
   return res
 }
 

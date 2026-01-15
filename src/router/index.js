@@ -70,10 +70,12 @@ const router = createRouter({
           component: () => import('../views/dashboard/StorageView.vue'),
           meta: { title: '저장용량', requiresAuth: true },
         },
-        { path: 'editor', 
+        {
+          path: 'editor',
           name: 'editor',
           component: () => import('../views/EditorView.vue'),
-          meta: { title: '에디터', requiresAuth: true} },
+          meta: { title: '에디터', requiresAuth: true },
+        },
       ],
     },
   ],
@@ -84,11 +86,11 @@ router.beforeEach((to, from, next) => {
 
   document.title = to.meta.title
 
-  if (to.meta.requiresAuth) {
-    if (localStorage.getItem('USERINFO') === null) {
-      next({ name: 'login' })
-    }
-  }
+  // if (to.meta.requiresAuth) {
+  //   if (localStorage.getItem('USERINFO') === null) {
+  //     next({ name: 'login' })
+  //   }
+  // }
   next()
 })
 

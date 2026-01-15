@@ -1,6 +1,9 @@
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, reactive } from 'vue'
 import { useMouse } from '@vueuse/core'
 import Quill from 'quill'
+import postApi from '@/api/postApi'
+
+let quill = null
 
 export function useEditorSocket() {
   const remoteMice = ref({})
@@ -10,7 +13,7 @@ export function useEditorSocket() {
     '#FF0000', // 빨강
     '#FF7F00', // 주황
     '#FFFF00', // 노랑
-    '#00FF00', // 초록  
+    '#00FF00', // 초록
     '#0000FF', // 파랑
     '#4B0082', // 남색
     '#8B00FF', // 보라
@@ -23,7 +26,6 @@ export function useEditorSocket() {
   const myColor = colorPalette[myNumber - 1]
 
   let socket = null
-  let quill = null
   let editorChangeFromRemote = false
 
   const { x, y } = useMouse()
@@ -76,8 +78,9 @@ export function useEditorSocket() {
     }
 
     // 3. 에디터 이벤트 등록
-    quill.on('text-change', (delta, oldDelta, source) => {
+    quill.on('text-change', (delta, source) => {
       if (source === 'user' && !editorChangeFromRemote && socket?.readyState === WebSocket.OPEN) {
+        isFormValid
         socket.send(JSON.stringify({ senderId, delta }))
       }
     })
@@ -96,6 +99,7 @@ export function useEditorSocket() {
       )
     }
   })
+  const getQuill = () => quill
 
   // 컴포넌트 언마운트 시 소켓 정리
   onUnmounted(() => {
@@ -105,5 +109,53 @@ export function useEditorSocket() {
   return {
     remoteMice,
     initEditor,
+    getQuill,
+  }
+}
+export function save() {
+  const title = ref('')
+
+  const isFormValid = reactive(() => {
+    const hasTitle = title.value.trim().length > 0
+    const has_content = quill ? quill.getText().trim().length > 0 : false
+    return hasTitle && has_content
+  })
+
+  // const savePost = async () => {
+  //   try {
+  //     const payload = {
+  //       title: title.value,
+  //       content: quill.root.innerHTML,
+  //     }
+  //     await postApi.savePost('/posts', payload)
+  //     alert('저장되었습니다!')
+  //   } catch (error) {
+  //     console.error('에러 발생:', error)
+  //   }
+  // }
+
+  // 1. DB에 저장하기 (Save)
+  const savePost = async () => {
+    if (!quill) return
+
+    // 2. 서버로 보낼 페이로드 구성 (제목, 본문, 날짜)
+    const payload = {
+      title: title.value, // 제목 (문자열)
+      content: JSON.stringify(quill.getContents()), // 본문 (Delta 객체를 JSON 문자열로 변환)
+      updatedAt: new Date().toISOString(), // 업데이트 날짜 (ISO 8601 형식: 2026-01-15T...)
+    }
+
+    try {
+      await postApi.savePost(payload)
+      alert('저장되었습니다!')
+    } catch (err) {
+      console.error('저장 실패:', err)
+    }
+  }
+
+  return {
+    title,
+    isFormValid,
+    savePost,
   }
 }
