@@ -21,14 +21,11 @@
     "pinia": "^3.0.4",
     "quill-cursors": "^4.0.4",
     "tailwindcss": "^4.1.18",
-    "throttle": "^1.0.3",
     "vue": "^3.5.26",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.6.4",
-    "ws": "^8.19.0",
     "y-quill": "^1.0.0",
-    "y-websocket": "^3.0.0",
-    "yjs": "^13.6.29"
+    "y-websocket": "^3.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.3",

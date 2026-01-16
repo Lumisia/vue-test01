@@ -8,74 +8,65 @@ const isSharedOpen = ref(true)
 const personalItems = ['SSL 인증서', '포트폴리오', 'Vue 학습']
 const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
 </script>
+
 <template>
-  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+  <aside class="sidebar-container">
     <div class="p-6 flex items-center gap-3">
-      <div
-        class="w-8 h-8 bg-blue-600 rounded-lg shadow-blue-200 shadow-lg flex items-center justify-center"
-      >
-        <span class="text-white font-bold text-lg">W</span>
+      <div class="logo-icon">
+        <span class="text-white font-bold text-lg">F</span>
       </div>
-      <span class="font-bold text-gray-800 tracking-tight">CloudSpace</span>
+      <span class="logo-text">FileInNOut</span>
     </div>
 
-    <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
+    <nav class="sidebar-nav">
       <div class="mb-6">
-
-        <FileUpload class="w-full flex items-center gap-3 px-4 py-2 text-sm
-                font-bold
-                text-blue-700
-                bg-sky-300
-                hover:bg-sky-100
-                active:bg-sky-400
-                rounded-xl
-                transition-colors duration-150"
-                active-class="bg-sky-200 text-blue-800 font-bold">
+        <FileUpload class="upload-button">
         </FileUpload>
+        <br>
 
         <RouterLink
           :to="{ name: 'home' }"
-          class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition"
-          active-class="bg-blue-50 text-blue-700 font-bold"
+          class="nav-link"
+          active-class="nav-link-active"
         >
           <i class="fa-solid fa-house"></i> 홈
         </RouterLink>
 
         <RouterLink
           :to="{ name: 'drive' }"
-          class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition"
-          active-class="bg-blue-50 text-blue-700 font-bold"
+          class="nav-link"
+          active-class="nav-link-active"
         >
           <i class="fa-brands fa-google-drive"></i> 내 드라이브
         </RouterLink>
 
         <RouterLink
           :to="{ name: 'shareFile' }"
-          class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition"
-          active-class="bg-blue-50 text-blue-700 font-bold"
+          class="nav-link"
+          active-class="nav-link-active"
         >
           <i class="fa-solid fa-people-group"></i> 공유 문서함
         </RouterLink>
 
         <RouterLink
           :to="{ name: 'recentFile' }"
-          class="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition"
-          active-class="bg-blue-50 text-blue-700 font-bold"
+          class="nav-link"
+          active-class="nav-link-active"
         >
           <i class="fa-solid fa-clock"></i>최근 문서함
         </RouterLink>
       </div>
 
-      <div class="border-t border-gray-100 my-4 mx-2"></div>
+      <div class="divider"></div>
 
       <div>
         <div
           @click="isPersonalOpen = !isPersonalOpen"
-          class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-100 rounded-lg group"
+          class="section-header"
         >
-          <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">개인 페이지</h3>
+          <h3 class="section-title">개인 페이지</h3>
           <span
-            class="text-[10px] text-gray-400 transition-transform duration-200"
+            class="section-toggle"
             :class="{ 'rotate-180': !isPersonalOpen }"
           >
           </span>
@@ -85,7 +76,7 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
           <div
             v-for="item in personalItems"
             :key="item"
-            class="px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer flex items-center gap-2 transition"
+            class="sidebar-item"
           >
             <i class="fa-solid fa-file-lines"></i> {{ item }}
           </div>
@@ -95,11 +86,11 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
       <div>
         <div
           @click="isSharedOpen = !isSharedOpen"
-          class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-100 rounded-lg group"
+          class="section-header"
         >
-          <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">협업 페이지</h3>
+          <h3 class="section-title">협업 페이지</h3>
           <span
-            class="text-[10px] text-gray-400 transition-transform duration-200"
+            class="section-toggle"
             :class="{ 'rotate-180': !isSharedOpen }"
           >
           </span>
@@ -109,34 +100,35 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
           <div
             v-for="team in sharedItems"
             :key="team"
-            class="px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer flex items-center gap-2 transition"
+            class="sidebar-item"
           >
             <span class="text-xs text-blue-500">●</span> {{ team }}
           </div>
         </div>
+        
         <RouterLink
           :to="{ name: 'trash' }"
-          class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
+          class="nav-link"
         >
           <i class="fa-solid fa-trash"></i>
           <span>휴지통</span>
         </RouterLink>
 
-        <div class="px-3 pt-2">
-          <RouterLink :to="{ name: 'storage' }" class="flex items-center gap-3 text-gray-600 mb-3">
-            <i class="fa-solid fa-cloud w"></i>
+        <div class="storage-section">
+          <RouterLink :to="{ name: 'storage' }" class="storage-link">
+            <i class="fa-solid fa-cloud"></i>
             <span class="text-sm">저장용량</span>
           </RouterLink>
 
-          <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
-            <div class="bg-blue-600 h-1.5 rounded-full" style="width: 45%"></div>
+          <div class="storage-bar-container">
+            <div class="storage-bar" style="width: 45%"></div>
           </div>
 
-          <p class="text-[11px] text-gray-500 mb-4">15GB 중 6.75GB 사용</p>
+          <p class="storage-text">15GB 중 6.75GB 사용</p>
 
           <RouterLink
             :to="{ name: 'payment' }"
-            class="block w-full text-center border border-gray-300 py-2 rounded-full text-sm font-semibold text-blue-600 hover:bg-blue-50 transition"
+            class="upgrade-button"
           >
             추가 저장용량 구매
           </RouterLink>
@@ -146,19 +138,233 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
   </aside>
 </template>
 
-<style>
-  /* + 버튼 스타일 */
-.add-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #aaa;
+<style scoped>
+/* 사이드바 컨테이너 */
+.sidebar-container {
+  width: 16rem;
+  background-color: var(--bg-main);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* 로고 */
+.logo-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: #2563eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
+}
+
+/* 내비게이션 */
+.sidebar-nav {
+  flex: 1;
+  padding: 0 0.75rem;
+  overflow-y: auto;
+}
+
+/* 업로드 버튼 */
+.upload-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background-color: #bae6fd;
+  border-radius: 0.75rem;
+  transition: all 0.15s;
+}
+
+.upload-button:hover {
+  background-color: #7dd3fc;
+}
+
+.upload-button:active {
+  background-color: #0ea5e9;
+}
+
+/* 네비게이션 링크 */
+.nav-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+}
+
+.nav-link-active {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.dark .nav-link-active {
+  background-color: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+/* 구분선 */
+.divider {
+  border-top: 1px solid var(--border-color);
+  margin: 1rem 0.5rem;
+}
+
+/* 섹션 헤더 */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  padding: 0 5px;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.section-header:hover {
+  background-color: var(--bg-input);
+}
+
+.section-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-toggle {
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+/* 사이드바 아이템 */
+.sidebar-item {
+  padding: 0.375rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+}
+
+/* 저장용량 섹션 */
+.storage-section {
+  padding: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.storage-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
   transition: color 0.2s;
 }
 
-.add-btn:hover {
-  color: #333; /* 마우스 올렸을 때 진해짐 */
+.storage-link:hover {
+  color: var(--text-main);
+}
+
+.storage-bar-container {
+  width: 100%;
+  background-color: var(--bg-input);
+  border-radius: 9999px;
+  height: 0.375rem;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.storage-bar {
+  background-color: #2563eb;
+  height: 0.375rem;
+  border-radius: 9999px;
+  transition: width 0.3s;
+}
+
+.dark .storage-bar {
+  background-color: #60a5fa;
+}
+
+.storage-text {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.upgrade-button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2563eb;
+  background-color: var(--bg-main);
+  transition: all 0.2s;
+}
+
+.upgrade-button:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.dark .upgrade-button {
+  color: #60a5fa;
+}
+
+.dark .upgrade-button:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+}
+
+/* 스크롤바 */
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 </style>

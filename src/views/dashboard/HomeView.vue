@@ -16,6 +16,9 @@ const homeFiles = [
     date: '2025. 12. 12.',
   },
 ]
+const downloadFile = (filename) => {
+  window.location.href = `/download/${filename}`
+}
 </script>
 <template>
   <div>
@@ -29,13 +32,10 @@ const homeFiles = [
         <div
           v-for="i in 4"
           :key="i"
-          class="bg-white p-4 rounded-xl border border-gray-200 hover:shadow-md cursor-pointer transition"
+          @click="downloadFile(`recommend${i}.pdf`)"
+          class="bg-white p-4 rounded-xl cursor-pointer"
         >
-          <div class="h-32 bg-gray-50 rounded-lg mb-3 flex items-center justify-center text-3xl">
-            📄
-          </div>
-          <p class="text-sm font-medium truncate">추천 문서 {{ i }}.pdf</p>
-          <p class="text-xs text-gray-400 mt-1">최근에 수정함</p>
+          <p>추천 문서 {{ i }}.pdf</p>
         </div>
       </div>
     </div>

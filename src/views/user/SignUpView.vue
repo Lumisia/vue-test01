@@ -1,31 +1,108 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/api/user'
+
 const router = useRouter()
 
-const signForm = ref({
+const signupForm = reactive({
   nickname: '',
-  name: '',
+  email: '',
   password: '',
   passwordConfirm: '',
 })
 
-const errorMessage = ref('')
+const signupInputError = reactive({
+  nickname: {
+    errorMessage: null,
+    isValid: false
+  },
+  email: {
+    errorMessage: null,
+    isValid: false
+  },
+  password: {
+    errorMessage: null,
+    isValid: false
+  },
+  passwordConfirm: {
+    errorMessage: null,
+    isValid: false
+  }
+})
 
-const signup = async () => {
-  if (signForm.value.password !== signForm.value.passwordConfirm) {
-    errorMessage.value = '비밀번호가 일치하지 않습니다.'
-    return
+const nicknameRules = () => {
+  if (signupForm.nickname === '') {
+    signupInputError.nickname.errorMessage = "닉네임을 입력해 주세요."
+    signupInputError.nickname.isValid = false
+    return false
   }
 
-  const res = await api.signup(signForm.value)
+  signupInputError.nickname.errorMessage = null;
+  signupInputError.nickname.isValid = true
+}
 
-  if (res.status === 200 || res.status === 201) {
-    alert('회원가입이 완료되었습니다.')
+const emailRules = () => {
+  if (signupForm.email === '') {
+    signupInputError.email.errorMessage = "이메일 주소를 입력해 주세요."
+    signupInputError.email.isValid = false
+    return false
+  }
+
+  if (!signupForm.email.includes('@')) {
+    signupInputError.email.errorMessage = "이메일 형식이 올바르지 않습니다."
+    signupInputError.email.isValid = false
+    return false
+  }
+
+  signupInputError.email.errorMessage = null;
+  signupInputError.email.isValid = true
+}
+
+const pwRules = () => {
+  if (signupForm.password === '') {
+    signupInputError.password.errorMessage = "비밀번호를 입력해 주세요."
+    signupInputError.password.isValid = false
+    return false
+  }
+
+  if (signupForm.password.length < 8) {
+    signupInputError.password.errorMessage = "영문, 숫자, 특수문자를 조합하여 8자 이상 입력해 주세요."
+    signupInputError.password.isValid = false
+    return false
+  }
+
+  signupInputError.password.errorMessage = null;
+  signupInputError.password.isValid = true
+}
+
+const pwConfirmRules = () => {
+  if (signupForm.passwordConfirm === '') {
+    signupInputError.passwordConfirm.errorMessage = "비밀번호를 한 번 더 입력해 주세요."
+    signupInputError.passwordConfirm.isValid = false
+    return false
+  }
+
+  signupInputError.passwordConfirm.errorMessage = null;
+  signupInputError.passwordConfirm.isValid = true
+}
+
+const isValidCheck = () => {
+  return !(signupInputError.nickname.isValid && signupInputError.email.isValid && signupInputError.password.isValid && signupInputError.passwordConfirm.isValid)
+}
+
+const signup = async () => {
+  const res = await api.signup(signupForm)
+
+
+  if (res.status === 200) {
+    alert('회원가입 성공')
     router.push({ name: 'login' })
   }
 }
+
+
+
 </script>
 
 <template>
@@ -42,62 +119,46 @@ const signup = async () => {
       <form @submit.prevent="signup" class="space-y-4" novalidate>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">닉네임</label>
-          <input
-            v-model="signForm.nickname"
-            type="text"
-            placeholder="사용할 닉네임을 입력하세요"
-            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <input v-model="signupForm.nickname" @blur="nicknameRules" type="text" placeholder="사용할 닉네임을 입력하세요"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-red-600 text-xs font-medium leading-relaxed">
+            {{ signupInputError.nickname.errorMessage }}
+          </p>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">이메일</label>
-          <input
-            v-model="signForm.name"
-            type="email"
-            placeholder="이메일을 입력하세요"
-            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <input v-model="signupForm.email" @blur="emailRules" type="email" placeholder="이메일을 입력하세요"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-red-600 text-xs font-medium leading-relaxed">
+            {{ signupInputError.email.errorMessage }}
+          </p>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">비밀번호</label>
-          <input
-            v-model="signForm.password"
-            type="password"
-            placeholder="비밀번호"
-            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <input v-model="signupForm.password" @blur="pwRules" type="password" placeholder="비밀번호"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-red-600 text-xs font-medium leading-relaxed">
+            {{ signupInputError.password.errorMessage }}
+          </p>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">비밀번호 확인</label>
-          <input
-            v-model="signForm.passwordConfirm"
-            type="password"
-            placeholder="비밀번호 확인"
-            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div
-          v-if="errorMessage"
-          class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2"
-        >
-          <span class="text-red-500 text-sm font-bold"></span>
+          <input v-model="signupForm.passwordConfirm" @blur="pwConfirmRules" type="password" placeholder="비밀번호 확인"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
           <p class="text-red-600 text-xs font-medium leading-relaxed">
-            {{ errorMessage }}
+            {{ signupInputError.passwordConfirm.errorMessage }}
           </p>
         </div>
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition mt-6"
-        >
+
+        <button :disabled="isValidCheck()"
+          class="w-full bg-blue-600 text-white font-semibold py-3 rounded-md hover:bg-blue-700 transition mt-6">
           가입하기
         </button>
       </form>
 
       <p class="text-center text-sm text-gray-500 mt-8">
         이미 계정이 있으신가요?
-        <RouterLink :to="{ name: 'login' }" class="text-blue-600 hover:underline font-medium"
-          >로그인</RouterLink
-        >
+        <RouterLink to="/login" class="text-blue-600 hover:underline font-medium">로그인</RouterLink>
       </p>
     </div>
   </div>

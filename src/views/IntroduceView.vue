@@ -7,9 +7,9 @@
         <div
           class="w-9 h-9 bg-blue-600 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center text-white font-bold text-xl"
         >
-          W
+          F
         </div>
-        <span class="font-bold text-2xl tracking-tight text-gray-900">CloudSpace</span>
+        <span class="font-bold text-2xl tracking-tight text-gray-900">FileInNOut</span>
       </div>
       <div class="flex items-center gap-10 text-sm font-semibold text-gray-500">
         <a href="#" class="hover:text-blue-600 transition">기능</a>
@@ -37,7 +37,7 @@
       </h1>
       <p class="text-gray-500 text-xl mb-12 leading-relaxed max-w-2xl mx-auto">
         파일 저장, 팀 공유, 실시간 편집, 그리고 채팅까지.<br />
-        CloudSpace는 흩어져 있는 업무 도구를 하나로 통합합니다.
+        FileInNOut는 흩어져 있는 업무 도구를 하나로 통합합니다.
       </p>
       <div class="flex flex-col items-center gap-5">
         <RouterLink
@@ -137,11 +137,11 @@
         <div
           class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-blue-200"
         >
-          W
+          F
         </div>
-        <span class="font-bold text-lg tracking-tight text-gray-900">CloudSpace</span>
+        <span class="font-bold text-lg tracking-tight text-gray-900">FileInNOut</span>
       </div>
-      <p class="text-gray-400 text-xs mb-4">© 2026 CloudSpace Inc. All rights reserved.</p>
+      <p class="text-gray-400 text-xs mb-4">© 2026 FileInNOut Inc. All rights reserved.</p>
       <div class="flex justify-center gap-6 text-xs text-gray-400">
         <a href="#" class="hover:text-blue-600">개인정보처리방침</a>
         <a href="#" class="hover:text-blue-600">이용약관</a>

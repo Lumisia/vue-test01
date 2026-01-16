@@ -7,9 +7,9 @@
         <div
           class="w-9 h-9 bg-blue-600 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center text-white font-bold text-xl"
         >
-          W
+          F
         </div>
-        <span class="font-bold text-2xl tracking-tight text-gray-900">CloudSpace</span>
+        <span class="font-bold text-2xl tracking-tight text-gray-900">FileInNOut</span>
       </div>
       <div class="flex items-center gap-6 text-sm font-semibold">
         <RouterLink :to="{ name: 'login' }" class="text-gray-500 hover:text-blue-600"
@@ -33,11 +33,13 @@
         <span :class="!isYearly ? 'text-gray-900 font-bold' : 'text-gray-400'">월간 결제</span>
         <button
           @click="isYearly = !isYearly"
-          class="w-14 h-7 bg-gray-200 rounded-full relative p-1 transition-colors"
+          class="w-14 h-7 bg-gray-200 rounded-full relative p-1 transition-colors duration-300"
           :class="{ 'bg-blue-600': isYearly }"
         >
           <div
-            class="w-5 h-5 bg-white rounded-full shadow transition-transform"
+            class="w-5 h-5 bg-white rounded-full shadow
+                  transition-transform duration-300
+                  absolute left-1 top-1"
             :class="{ 'translate-x-7': isYearly }"
           ></div>
         </button>
@@ -110,7 +112,6 @@
 
 <script setup>
 import { ref } from 'vue'
-
 const isYearly = ref(false)
 
 const plans = [

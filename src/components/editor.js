@@ -10,10 +10,14 @@ import { WebsocketProvider } from 'y-websocket'
 Quill.register('modules/cursors', QuillCursors)
 
 let quill = null
-let ydoc = null
-let provider = null
 
 export function useEditorSocket() {
+  const title = ref('') // 제목 반응형 데이터
+  const remoteMice = ref({}) // 다른 사용자들의 마우스 위치
+  let quill = null
+  let ydoc = null
+  let provider = null
+
   const colorPalette = [
     '#FF0000', // 빨강
     '#FF7F00', // 주황
@@ -26,11 +30,10 @@ export function useEditorSocket() {
     '#00CED1', // 민트 (9번)
     '#ADFF2F', // 연두 (10번)
   ]
-  const title = save.title
+
   const myNumber = Math.floor(Math.random() * 10) // 1~10
   const myColor = colorPalette[myNumber]
   const myName = `사용자 ${myNumber + 1}`
-  const remoteMice = ref({})
 
   // 에디터 및 소켓 초기화 함수 (onMounted 제거됨)
   const initEditor = (elementId, roomName = 'default-room') => {
