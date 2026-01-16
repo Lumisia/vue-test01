@@ -16,7 +16,7 @@ const login = async () => {
   const res = await api.login(loginForm)
 
   if (res.status === 200) {
-    authStore.login(res)
+    authStore.login(JSON.stringify(res.data))
     alert('로그인 성공')
     router.push({ name: 'main' })
   } else {
