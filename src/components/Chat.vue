@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { computed } from 'vue'
 import ChatRoom from './ChatRoom.vue'
 import ChatList from './Chatlist.vue'
-import useAuthStore from '@/stores/useAuthStore'
+import {useAuthStore} from '@/stores/useAuthStore'
 import api from '@/plugins/axiosinterceptor.js' // axios 인스턴스 임포트
 
 const props = defineProps({ isOpen: Boolean })
