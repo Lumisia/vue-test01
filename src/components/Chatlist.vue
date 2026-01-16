@@ -12,7 +12,7 @@ const emit = defineEmits(['select-room'])
       class="flex items-center gap-4 p-4 rounded-xl hover:bg-[var(--bg-input)] cursor-pointer transition-colors group"
     >
       <div
-        class="w-10 h-10 rounded-lg bg-[#f07d18]/10 flex items-center justify-center text-[#f07d18] group-hover:bg-[#f07d18] group-hover:text-white transition-all"
+        class="w-10 h-10 rounded-lg bg-[#1cacff]/10 flex items-center justify-center text-[#1cacff] group-hover:bg-[#1cacff] group-hover:text-white transition-all"
       >
         <i :class="['fa-solid', room.icon]"></i>
       </div>

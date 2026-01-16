@@ -16,7 +16,7 @@ defineProps(['files'])
         <tr
           v-for="file in files"
           :key="file.name"
-          class="border-b border-gray-50 hover:bg-gray-50 group transition"
+          class="border-gray-50 hover:bg-gray-50 group transition"
         >
           <td class="px-6 py-4 flex items-center gap-3">
             <span class="text-blue-500">📄</span>

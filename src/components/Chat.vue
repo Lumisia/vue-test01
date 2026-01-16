@@ -6,7 +6,7 @@ import ChatList from './Chatlist.vue'
 const props = defineProps({ isOpen: Boolean })
 const emit = defineEmits(['close'])
 
-const viewMode = ref('list') // 'list' or 'room'
+const viewMode = ref('list')
 const selectedRoom = ref(null)
 const currentUser = { name: '선엽' }
 
@@ -24,26 +24,21 @@ const handleSelectRoom = (room) => {
 </script>
 
 <template>
-  <aside
-    class="bg-white border-l border-gray-200 transition-all duration-300 overflow-hidden flex flex-col z-[40]"
-    :class="isOpen ? 'w-80' : 'w-0'"
-  >
-    <div
-      class="h-16 border-b border-[var(--border-color)] flex items-center justify-between px-5 shrink-0"
-    >
+  <aside class="chat-panel" :class="isOpen ? 'chat-panel-open' : 'chat-panel-closed'">
+    <div class="chat-header">
       <div class="flex items-center gap-2">
         <button
           v-if="viewMode === 'room'"
           @click="viewMode = 'list'"
-          class="mr-1 hover:text-[#f07d18]"
+          class="back-button"
         >
           <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <span class="font-black text-sm uppercase tracking-wider text-[var(--text-main)]">
+        <span class="chat-title">
           {{ viewMode === 'list' ? '채팅 목록' : selectedRoom.name }}
         </span>
       </div>
-      <button @click="emit('close')" class="text-[var(--text-muted)] hover:text-white">
+      <button @click="emit('close')" class="close-button">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
@@ -52,3 +47,60 @@ const handleSelectRoom = (room) => {
     <ChatRoom v-else :room="selectedRoom" :currentUser="currentUser" @back="viewMode = 'list'" />
   </aside>
 </template>
+
+<style scoped>
+.chat-panel {
+  background-color: var(--bg-main);
+  border-left: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+
+.chat-panel-open {
+  width: 20rem;
+}
+
+.chat-panel-closed {
+  width: 0;
+}
+
+.chat-header {
+  height: 4rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  flex-shrink: 0;
+}
+
+.back-button {
+  margin-right: 0.25rem;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: var(--accent);
+}
+
+.chat-title {
+  font-weight: 900;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+}
+
+.close-button {
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: var(--text-main);
+}
+</style>

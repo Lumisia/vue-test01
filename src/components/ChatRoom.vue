@@ -1,119 +1,4 @@
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue'
-import api from '@/plugins/axiosinterceptor.js'
-
-const props = defineProps({ room: Object, currentUser: Object })
-const emit = defineEmits(['back'])
-
-const chatMessages = ref([])
-const newMessage = ref('')
-const scrollContainer = ref(null)
-
-// 1. 기존 내역 불러오기 (HTTP 통신 유지)
-const fetchHistory = async () => {
-  try {
-    const response = await api.get('/api/chatHistory.json')
-    const allData = response.data
-    chatMessages.value = allData[props.room.id] || []
-
-    await nextTick()
-    scrollToBottom()
-  } catch (error) {
-    console.error('데이터를 가져오는 데 실패했습니다:', error)
-  }
-}
-
-const scrollToBottom = () => {
-  if (scrollContainer.value) {
-    scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
-  }
-}
-
-// 2. 메시지 전송 로직 변경 (웹소켓 제거)
-const sendMessage = () => {
-  if (!newMessage.value.trim()) return
-
-  // 내 화면에 즉시 메시지 추가
-  const myMsg = {
-    id: Date.now(),
-    sender: props.currentUser.name,
-    text: newMessage.value,
-    isMe: true,
-  }
-
-  chatMessages.value.push(myMsg)
-
-  // 임시: 상대방이 대답하는 것처럼 보이게 하는 가짜 자동 응답 (테스트용)
-  setTimeout(() => {
-    chatMessages.value.push({
-      id: Date.now() + 1,
-      sender: '시스템',
-      text: `'${newMessage.value}' 메시지를 받았습니다. (데모 모드)`,
-      isMe: false,
-    })
-    nextTick(() => scrollToBottom())
-  }, 500)
-
-  newMessage.value = ''
-  nextTick(() => scrollToBottom())
-}
-
-onMounted(() => {
-  fetchHistory()
-})
-
-// 방이 바뀔 때 내역 다시 로드
-watch(
-  () => props.room.id,
-  () => {
-    fetchHistory()
-  },
-)
-</script>
-
-<template>
-  <div class="flex flex-col h-full overflow-hidden">
-    <div ref="scrollContainer" class="flex-1 overflow-y-auto p-5 space-y-4">
-      <div
-        v-for="msg in chatMessages"
-        :key="msg.id"
-        :class="['flex gap-3', msg.isMe ? 'flex-row-reverse' : '']"
-      >
-        <div :class="['flex flex-col max-w-[75%]', msg.isMe ? 'items-end' : 'items-start']">
-          <p class="text-[10px] font-bold text-[var(--text-muted)] mb-1">{{ msg.sender }}</p>
-          <div
-            :class="[
-              'p-3 rounded-2xl text-xs break-words',
-              msg.isMe ? 'bg-[#f07d18] text-white' : 'bg-[var(--bg-input)] text-[var(--text-main)]',
-            ]"
-          >
-            {{ msg.text }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-4 border-t border-gray-100">
-      <div class="relative">
-        <input
-          v-model="newMessage"
-          @keyup.enter="sendMessage"
-          type="text"
-          placeholder="메시지 입력..."
-          class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-        />
-        <button
-          @click="sendMessage"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-[#f07d18]"
-        >
-          <i class="fa-solid fa-paper-plane"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
-<!-- <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import api from '@/plugins/axiosinterceptor.js'
 const props = defineProps({ room: Object, currentUser: Object })
@@ -130,7 +15,7 @@ const fetchHistory = async () => {
   try {
     // baseURL이 이미 http://10.10.10.20:8080 이므로 나머지 경로만 작성
     // 톰캣ROOT/api/chatHistory.json 에 파일이 있다면:
-    const response = await api.get('/api/chatHistory.json')
+    const response = await api.get('/json/chat/chathistory')
 
     // axios는 데이터를 response.data에 담아줍니다.
     const allData = response.data
@@ -164,6 +49,10 @@ const initChat = () => {
       const rawData = JSON.parse(e.data)
       const data =
         typeof rawData.payload === 'string' ? JSON.parse(rawData.payload) : rawData.payload
+      if (data.roomId !== props.room.id) {
+        console.log('다른 방 메시지라 무시합니다.')
+        return
+      }
       if (data.message) {
         chatMessages.value.push({
           id: Date.now(),
@@ -181,8 +70,23 @@ const initChat = () => {
 
 const sendMessage = () => {
   if (!newMessage.value.trim() || !isConnected.value) return
-  websocket.send(JSON.stringify({ nickname: props.currentUser.name, message: newMessage.value }))
+  websocket.send(
+    JSON.stringify({
+      roomId: props.room.id,
+      nickname: props.currentUser.name,
+      message: newMessage.value,
+    }),
+  )
+
+  chatMessages.value.push({
+    id: Date.now(),
+    sender: props.currentUser.name,
+    text: newMessage.value,
+    isMe: true, // 내가 쓴 것이므로 true
+  })
+
   newMessage.value = ''
+  nextTick(() => scrollToBottom())
 }
 
 // [수정] 컴포넌트가 켜질 때 내역 로드와 소켓 연결을 동시에 수행
@@ -193,6 +97,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (websocket) websocket.close()
+  console.log('꺼짐')
 })
 
 // [추가] 목록에서 다른 방을 클릭했을 때 데이터를 새로 고침
@@ -218,7 +123,7 @@ watch(
           <div
             :class="[
               'p-3 rounded-2xl text-xs break-words',
-              msg.isMe ? 'bg-[#f07d18] text-white' : 'bg-[var(--bg-input)] text-[var(--text-main)]',
+              msg.isMe ? 'bg-[#1cacff] text-white' : 'bg-[var(--bg-input)] text-[var(--text-main)]',
             ]"
           >
             {{ msg.text }}
@@ -239,11 +144,11 @@ watch(
 
         <button
           @click="sendMessage"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-[#f07d18]"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-[#1cacff]"
         >
           <i class="fa-solid fa-paper-plane"></i>
         </button>
       </div>
     </div>
   </div>
-</template> -->
+</template>
