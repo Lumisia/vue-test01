@@ -1,15 +1,19 @@
-import { ref, watch, onUnmounted, computed } from 'vue'
-import { throttle } from 'lodash-es'
-import { useMouse } from '@vueuse/core'
+import { ref, onUnmounted, computed } from 'vue'
 import Quill from 'quill'
 import postApi from '@/api/postApi'
+import QuillCursors from 'quill-cursors'
+import * as Y from 'yjs'
+import { QuillBinding } from 'y-quill'
+import { WebsocketProvider } from 'y-websocket'
+
+// Quill 모듈 등록
+Quill.register('modules/cursors', QuillCursors)
 
 let quill = null
+let ydoc = null
+let provider = null
 
 export function useEditorSocket() {
-  const remoteMice = ref({})
-  //   const senderId = Math.floor(Math.random() * 9) + 1
-  //   const myColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
   const colorPalette = [
     '#FF0000', // 빨강
     '#FF7F00', // 주황
@@ -22,22 +26,26 @@ export function useEditorSocket() {
     '#00CED1', // 민트 (9번)
     '#ADFF2F', // 연두 (10번)
   ]
-  const myNumber = Math.floor(Math.random() * 10) + 1 // 1~10
-  const senderId = myNumber
-  const myColor = colorPalette[myNumber - 1]
-
-  let socket = null
-  let editorChangeFromRemote = false
-
-  const { x, y } = useMouse()
+  const title = save.title
+  const myNumber = Math.floor(Math.random() * 10) // 1~10
+  const myColor = colorPalette[myNumber]
+  const myName = `사용자 ${myNumber + 1}`
 
   // 에디터 및 소켓 초기화 함수 (onMounted 제거됨)
-  const initEditor = (elementId) => {
+  const initEditor = (elementId, roomName) => {
+    ydoc = new Y.Doc()
+    provider = new WebsocketProvider(
+      'ws://localhost:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
+      roomName,
+      ydoc,
+    )
+
     // 1. Quill 초기화
     quill = new Quill(elementId, {
       theme: 'snow',
       placeholder: '내용을 입력하세요...',
       modules: {
+        cursors: true,
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'],
           ['blockquote', 'code-block'],
@@ -51,81 +59,28 @@ export function useEditorSocket() {
       },
     })
 
-    // 2. 소켓 연결
-    socket = new WebSocket('wss://www.cheeseduck.kro.kr:443/ws/chat')
+    // 3. Yjs-Quill 바인딩 (이 부분이 핵심: 자동 동기화)
+    const ytext = ydoc.getText('quill')
+    new QuillBinding(ytext, quill, provider.awareness)
 
-    socket.onopen = () => console.log('Connected to WebSocket')
+    // 4. 커서(Awareness) 정보 설정
+    provider.awareness.setLocalStateField('user', {
+      name: myName,
+      color: myColor,
+    })
 
-    socket.onmessage = (event) => {
-      const recv = JSON.parse(event.data)
-      const payload = JSON.parse(recv.payload)
-      const recvSenderId = payload.senderId
-      const delta = payload.delta
+    const getQuill = () => quill
 
-      if (delta && delta.ops) {
-        if (senderId !== recvSenderId && quill) {
-          editorChangeFromRemote = true
-          quill.updateContents(delta)
-          editorChangeFromRemote = false
-        }
-      } else if (payload.left !== undefined) {
-        remoteMice.value[recvSenderId] = {
-          senderId: recvSenderId,
-          color: payload.color,
-          left: payload.left,
-          top: payload.top,
-        }
-      }
-    }
-
-    // 3. 에디터 이벤트 등록
-    quill.on('text-change', (delta, source) => {
-      if (source === 'user' && !editorChangeFromRemote && socket?.readyState === WebSocket.OPEN) {
-        isFormValid
-        socket.send(JSON.stringify({ senderId, delta }))
-      }
+    // 컴포넌트 언마운트 시 소켓 정리
+    onUnmounted(() => {
+      if (provider) provider.destroy()
+      if (ydoc) ydoc.destroy()
     })
   }
 
-  const throttledSend = throttle((data) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify(data))
-    }
-  }, 50)
-
-  watch([x, y], ([newX, newY]) => {
-    throttledSend({
-      senderId,
-      color: myColor,
-      left: newX,
-      top: newY,
-    })
-  })
-
-  // // 내 마우스 위치 전송
-  // watch([x, y], ([newX, newY]) => {
-  //   if (socket && socket.readyState === WebSocket.OPEN) {
-  //     socket.send(
-  //       JSON.stringify({
-  //         senderId,
-  //         color: myColor,
-  //         left: newX,
-  //         top: newY,
-  //       }),
-  //     )
-  //   }
-  // })
-  const getQuill = () => quill
-
-  // 컴포넌트 언마운트 시 소켓 정리
-  onUnmounted(() => {
-    if (socket) socket.close()
-  })
-
   return {
-    remoteMice,
     initEditor,
-    getQuill,
+    title,
   }
 }
 export function save() {
@@ -138,14 +93,13 @@ export function save() {
   })
 
   // 1. DB에 저장하기 (Save)
-  const savePost = async () => {
-    if (!quill) return
+  const savePost = async (quill, title) => {
+    if (!quill || title.value.trim() === '') return
 
-    // 2. 서버로 보낼 페이로드 구성 (제목, 본문, 날짜)
     const payload = {
-      title: title.value, // 제목 (문자열)
-      content: JSON.stringify(quill.getContents()), // 본문 (Delta 객체를 JSON 문자열로 변환)
-      updatedAt: new Date().toISOString(), // 업데이트 날짜 (ISO 8601 형식: 2026-01-15T...)
+      title: title.value,
+      content: JSON.stringify(quill.getContents()),
+      updatedAt: new Date().toISOString(),
     }
 
     try {
@@ -157,7 +111,6 @@ export function save() {
   }
 
   return {
-    title,
     isFormValid,
     savePost,
   }

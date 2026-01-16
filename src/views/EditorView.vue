@@ -4,8 +4,8 @@ import { useEditorSocket, save } from '@/components/editor' // 경로 확인하�
 import 'quill/dist/quill.snow.css'
 
 // 로직 호출 (반드시 최상단에서)
-const { remoteMice, initEditor } = useEditorSocket()
-const { title, isFormValid, savePost } = save()
+const { initEditor, title } = useEditorSocket()
+const { isFormValid, savePost } = save()
 
 onMounted(() => {
   // 실제 DOM이 렌더링된 후 에디터 초기화
