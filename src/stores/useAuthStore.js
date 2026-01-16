@@ -1,16 +1,19 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-  const storedData = localStorage.getItem('USERINFO')
-  const data = ref(storedData ? JSON.parse(storedData) : null)
+  const isLogin = ref(false)
 
   const login = (userInfo) => {
+    isLogin.value = true
     localStorage.setItem('USERINFO', userInfo)
-    data.value = JSON.parse(userInfo)
   }
 
-  return { login, data }
+  const checkLogin = () => {
+    if (localStorage.getItem('USERINFO')) {
+      isLogin.value = true
+    }
+    return isLogin.value
+  }
+  return { isLogin, login, checkLogin }
 })
-export default useAuthStore
-

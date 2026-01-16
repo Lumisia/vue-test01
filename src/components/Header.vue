@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import useAuthStore from '@/stores/useAuthStore'
+import {useAuthStore} from '@/stores/useAuthStore'
 import ProfileModal from './ProfileModal.vue'
 
 const emit = defineEmits(['toggle-chat', 'toggle-theme', 'switch-view'])
