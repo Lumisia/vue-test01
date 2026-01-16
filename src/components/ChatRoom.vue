@@ -13,13 +13,17 @@ let websocket = null
 // [추가] JSON 데이터를 불러오는 함수
 const fetchHistory = async () => {
   try {
-    // baseURL이 이미 http://10.10.10.20:8080 이므로 나머지 경로만 작성
     // 톰캣ROOT/api/chatHistory.json 에 파일이 있다면:
-    const response = await api.get('/json/chat/chathistory')
+    const response = await api.api.get('/json/chat/chathistory')
 
     // axios는 데이터를 response.data에 담아줍니다.
     const allData = response.data
-    chatMessages.value = allData[props.room.id] || []
+    const roomData = allData[props.room.id]
+    if (roomData && roomData.messages) {
+      chatMessages.value = roomData.messages
+    } else {
+      chatMessages.value = [] // 데이터가 없으면 빈 배열
+    }
 
     await nextTick()
     scrollToBottom()
@@ -69,6 +73,7 @@ const initChat = () => {
 }
 
 const sendMessage = () => {
+  try{
   if (!newMessage.value.trim() || !isConnected.value) return
   websocket.send(
     JSON.stringify({
@@ -87,6 +92,9 @@ const sendMessage = () => {
 
   newMessage.value = ''
   nextTick(() => scrollToBottom())
+  }catch(error){
+    console.error('메시지 송신 에러:', err)
+  }
 }
 
 // [수정] 컴포넌트가 켜질 때 내역 로드와 소켓 연결을 동시에 수행
@@ -123,7 +131,7 @@ watch(
           <div
             :class="[
               'p-3 rounded-2xl text-xs break-words',
-              msg.isMe ? 'bg-[#1cacff] text-white' : 'bg-[var(--bg-input)] text-[var(--text-main)]',
+              msg.isMe ? 'bg-[#4169E1] text-white' : 'bg-[var(--bg-input)] text-[var(--text-main)]',
             ]"
           >
             {{ msg.text }}
@@ -144,7 +152,7 @@ watch(
 
         <button
           @click="sendMessage"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-[#1cacff]"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-[#4169E1]"
         >
           <i class="fa-solid fa-paper-plane"></i>
         </button>
