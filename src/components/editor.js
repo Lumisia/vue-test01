@@ -1,4 +1,5 @@
-import { ref, watch, onUnmounted, reactive } from 'vue'
+import { ref, watch, onUnmounted, computed } from 'vue'
+import { throttle } from 'lodash-es'
 import { useMouse } from '@vueuse/core'
 import Quill from 'quill'
 import postApi from '@/api/postApi'
@@ -86,19 +87,34 @@ export function useEditorSocket() {
     })
   }
 
-  // 내 마우스 위치 전송
-  watch([x, y], ([newX, newY]) => {
+  const throttledSend = throttle((data) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(
-        JSON.stringify({
-          senderId,
-          color: myColor,
-          left: newX,
-          top: newY,
-        }),
-      )
+      socket.send(JSON.stringify(data))
     }
+  }, 50)
+
+  watch([x, y], ([newX, newY]) => {
+    throttledSend({
+      senderId,
+      color: myColor,
+      left: newX,
+      top: newY,
+    })
   })
+
+  // // 내 마우스 위치 전송
+  // watch([x, y], ([newX, newY]) => {
+  //   if (socket && socket.readyState === WebSocket.OPEN) {
+  //     socket.send(
+  //       JSON.stringify({
+  //         senderId,
+  //         color: myColor,
+  //         left: newX,
+  //         top: newY,
+  //       }),
+  //     )
+  //   }
+  // })
   const getQuill = () => quill
 
   // 컴포넌트 언마운트 시 소켓 정리
@@ -115,7 +131,7 @@ export function useEditorSocket() {
 export function save() {
   const title = ref('')
 
-  const isFormValid = reactive(() => {
+  const isFormValid = computed(() => {
     const hasTitle = title.value.trim().length > 0
     const has_content = quill ? quill.getText().trim().length > 0 : false
     return hasTitle && has_content
