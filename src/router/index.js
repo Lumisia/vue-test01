@@ -84,11 +84,11 @@ router.beforeEach((to, from, next) => {
 
   document.title = to.meta.title
 
-  if (to.meta.requiresAuth) {
-    if (localStorage.getItem('USERINFO') === null) {
-      next({ name: 'login' })
-    }
-  }
+  // if (to.meta.requiresAuth) {
+  //   if (localStorage.getItem('USERINFO') === null) {
+  //     next({ name: 'login' })
+  //   }
+  // }
   next()
 })
 
