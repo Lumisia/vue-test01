@@ -6,14 +6,14 @@ import api from '@/api/user'
 const router = useRouter()
 
 const signupForm = reactive({
-  nickname: '',
+  name: '',
   email: '',
   password: '',
   passwordConfirm: '',
 })
 
 const signupInputError = reactive({
-  nickname: {
+  name: {
     errorMessage: null,
     isValid: false
   },
@@ -32,14 +32,14 @@ const signupInputError = reactive({
 })
 
 const nicknameRules = () => {
-  if (signupForm.nickname === '') {
-    signupInputError.nickname.errorMessage = "닉네임을 입력해 주세요."
-    signupInputError.nickname.isValid = false
+  if (signupForm.name === '') {
+    signupInputError.name.errorMessage = "닉네임을 입력해 주세요."
+    signupInputError.name.isValid = false
     return false
   }
 
-  signupInputError.nickname.errorMessage = null;
-  signupInputError.nickname.isValid = true
+  signupInputError.name.errorMessage = null;
+  signupInputError.name.isValid = true
 }
 
 const emailRules = () => {
@@ -88,7 +88,7 @@ const pwConfirmRules = () => {
 }
 
 const isValidCheck = () => {
-  return !(signupInputError.nickname.isValid && signupInputError.email.isValid && signupInputError.password.isValid && signupInputError.passwordConfirm.isValid)
+  return !(signupInputError.name.isValid && signupInputError.email.isValid && signupInputError.password.isValid && signupInputError.passwordConfirm.isValid)
 }
 
 const signup = async () => {
@@ -119,10 +119,10 @@ const signup = async () => {
       <form @submit.prevent="signup" class="space-y-4" novalidate>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">닉네임</label>
-          <input v-model="signupForm.nickname" @blur="nicknameRules" type="text" placeholder="사용할 닉네임을 입력하세요"
+          <input v-model="signupForm.name" @blur="nicknameRules" type="text" placeholder="사용할 닉네임을 입력하세요"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
           <p class="text-red-600 text-xs font-medium leading-relaxed">
-            {{ signupInputError.nickname.errorMessage }}
+            {{ signupInputError.name.errorMessage }}
           </p>
         </div>
         <div>
