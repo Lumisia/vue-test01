@@ -41,7 +41,7 @@ export function useEditorSocket() {
 
     ydoc = new Y.Doc()
     provider = new WebsocketProvider(
-      'ws://192.100.200.8:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
+      'wss://www.leesunyeop.kro.kr/:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
       roomName,
       ydoc,
     )
