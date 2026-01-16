@@ -1,4 +1,4 @@
-import { ref, onUnmounted, computed } from 'vue'
+import { ref, onUnmounted, computed, watch } from 'vue'
 import Quill from 'quill'
 import postApi from '@/api/postApi'
 import QuillCursors from 'quill-cursors'
@@ -30,12 +30,15 @@ export function useEditorSocket() {
   const myNumber = Math.floor(Math.random() * 10) // 1~10
   const myColor = colorPalette[myNumber]
   const myName = `사용자 ${myNumber + 1}`
+  const remoteMice = ref({})
 
   // 에디터 및 소켓 초기화 함수 (onMounted 제거됨)
-  const initEditor = (elementId, roomName) => {
+  const initEditor = (elementId, roomName = 'default-room') => {
+    if (!roomName) roomName = 'default-room'
+
     ydoc = new Y.Doc()
     provider = new WebsocketProvider(
-      'ws://localhost:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
+      'ws://192.100.200.8:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
       roomName,
       ydoc,
     )
@@ -63,24 +66,60 @@ export function useEditorSocket() {
     const ytext = ydoc.getText('quill')
     new QuillBinding(ytext, quill, provider.awareness)
 
+    // 3. 제목 동기화
+    const yTitle = ydoc.getText('title')
+    yTitle.observe(() => {
+      if (title.value !== yTitle.toString()) title.value = yTitle.toString()
+    })
+    watch(title, (newVal) => {
+      if (yTitle.toString() !== newVal) {
+        ydoc.transact(() => {
+          yTitle.delete(0, yTitle.length)
+          yTitle.insert(0, newVal)
+        })
+      }
+    })
+
+    // 3. 마우스 위치 공유 (Awareness 활용)
+    // 내 마우스 움직임을 다른 사람에게 전송
+    window.addEventListener('mousemove', (e) => {
+      if (provider?.awareness) {
+        provider.awareness.setLocalStateField('mouse', {
+          x: e.clientX,
+          y: e.clientY,
+          name: myName,
+          color: myColor,
+        })
+      }
+    })
+    // 다른 사람들의 마우스 위치 변화 감지
+    provider.awareness.on('update', () => {
+      const states = provider.awareness.getStates()
+      const mice = {}
+      states.forEach((state, clientID) => {
+        if (clientID !== ydoc.clientID && state.mouse) {
+          mice[clientID] = state.mouse
+        }
+      })
+      remoteMice.value = mice
+    })
     // 4. 커서(Awareness) 정보 설정
     provider.awareness.setLocalStateField('user', {
       name: myName,
       color: myColor,
     })
 
-    const getQuill = () => quill
-
-    // 컴포넌트 언마운트 시 소켓 정리
-    onUnmounted(() => {
-      if (provider) provider.destroy()
-      if (ydoc) ydoc.destroy()
-    })
+    console.log(remoteMice.value)
   }
-
+  // 컴포넌트 언마운트 시 소켓 정리
+  onUnmounted(() => {
+    if (provider) provider.destroy()
+    if (ydoc) ydoc.destroy()
+  })
   return {
     initEditor,
     title,
+    remoteMice,
   }
 }
 export function save() {

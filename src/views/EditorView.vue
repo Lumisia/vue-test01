@@ -4,12 +4,12 @@ import { useEditorSocket, save } from '@/components/editor' // 경로 확인하�
 import 'quill/dist/quill.snow.css'
 
 // 로직 호출 (반드시 최상단에서)
-const { initEditor, title } = useEditorSocket()
+const { initEditor, title, remoteMice } = useEditorSocket()
 const { isFormValid, savePost } = save()
 
 onMounted(() => {
   // 실제 DOM이 렌더링된 후 에디터 초기화
-  initEditor('#editor')
+  initEditor('#editor', 'room-demo')
 })
 </script>
 
@@ -33,53 +33,43 @@ onMounted(() => {
     </div>
   </div>
   <div id="editor" class="flex-1 overflow-y-auto p-8 transition-all duration-300"></div>
-  <div id="cursor-layer">
-    <div
-      v-for="(mouse, id) in remoteMice"
-      :key="id"
-      class="mouse"
-      :style="{
-        backgroundColor: mouse.color,
-        left: mouse.left + 'px',
-        top: mouse.top + 'px',
-      }"
-    >
-      <span class="label">{{ mouse.senderId }}</span>
-    </div>
+  <div
+    v-for="(mouse, id) in remoteMice"
+    :key="id"
+    class="mouse"
+    :style="{
+      left: mouse.left + 'px',
+      top: mouse.top + 'px',
+    }"
+  >
+    <div class="mouse-pointer" :style="{ backgroundColor: mouse.color }"></div>
+    <div class="mouse-name" :style="{ backgroundColor: mouse.color }">{{ mouse.name }}</div>
   </div>
 </template>
 
 <style scoped>
-#cursor-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-}
-
 .mouse {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 50% 50% 50% 0;
-  transform: translate(-50%, -50%);
-  transition: all 0.05s linear;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.1s ease-out; /* 움직임을 부드럽게 */
+}
+.mouse-pointer {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 12px solid; /* 색상은 인라인 스타일로 결정 */
 }
 
-.label {
-  position: absolute;
-  top: 15px;
-  left: 10px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: inherit;
+.mouse-name {
+  padding: 2px 6px;
   color: white;
   font-size: 10px;
-  font-weight: bold;
+  border-radius: 4px;
+  margin-top: 4px;
   white-space: nowrap;
 }
 
