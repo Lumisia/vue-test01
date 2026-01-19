@@ -1,130 +1,134 @@
 <script setup>
-import { RouterLink } from 'vue-router'
 import IntrodHeader from '@/components/IntrodHeader.vue';
 </script>
 
 <template>
-  <IntrodHeader></IntrodHeader>
-  <div class="min-h-screen bg-gray-50 text-gray-800 font-sans selection:bg-blue-100">
-    <div class="max-w-5xl mx-auto text-center pt-32 pb-20 px-6">
-      <h1 class="text-6xl font-extrabold tracking-tight text-gray-900 mb-8 leading-tight">
-        모든 작업을<br />
-        <span class="text-blue-600 underline decoration-blue-100 underline-offset-8"
-          >하나의 흐름으로.</span
-        >
+  <div class="bg-white font-sans">
+    <IntrodHeader></IntrodHeader>
+
+    <section class="pt-20 pb-24 px-6 md:px-12 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight">
+        모든 파일을 한곳에,<br class="hidden md:block"> 팀 협업을 하나의 페이지에서.
       </h1>
-      <p class="text-gray-500 text-xl mb-12 leading-relaxed max-w-2xl mx-auto">
-        파일 저장, 팀 공유, 실시간 편집, 그리고 채팅까지.<br />
-        FileInNOut는 흩어져 있는 업무 도구를 하나로 통합합니다.
+      <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+        강력한 클라우드 드라이브와 실시간 문서 협업 도구의 결합.<br>
+        FileInNOut으로 흩어진 도구들을 하나로 모으고 스마트한 워크플로우를 경험하세요.
       </p>
-      <div class="flex flex-col items-center gap-5">
-        <RouterLink
-          :to="{ name: 'signup' }"
-          class="px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 hover:-translate-y-1"
-        >
-          지금 바로 시작하세요
-        </RouterLink>
-        <p class="text-gray-400 text-sm font-medium cursor-pointer hover:text-gray-600">
-          간편하게 둘러보기 →
-        </p>
+      <div class="flex justify-center gap-4 mb-16">
+        <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
+          지금 시작하기 <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+        </button>
       </div>
-    </div>
+      <div class="max-w-5xl mx-auto p-2 bg-slate-100 rounded-2xl shadow-xl overflow-hidden">
+        <img src="@/assets/images/Dashboard.png" alt="FileInNOut Dashboard Preview" class="w-full rounded-xl border border-slate-200/50">
+      </div>
+    </section>
 
-    <section class="max-w-6xl mx-auto px-6 mb-32">
-      <div class="bg-white rounded-3xl border border-gray-200 p-3 shadow-2xl shadow-gray-200/50">
-        <div
-          class="bg-gray-50 rounded-2xl overflow-hidden aspect-video border border-gray-100 flex items-center justify-center relative"
-        >
-          <div class="absolute inset-0 flex opacity-40">
-            <div class="w-64 border-r border-gray-200 bg-white p-6 space-y-4">
-              <div class="h-4 w-full bg-gray-200 rounded"></div>
-              <div class="h-4 w-2/3 bg-gray-200 rounded"></div>
-              <div class="h-4 w-3/4 bg-blue-100 rounded mt-10"></div>
+    <section class="py-24 bg-slate-50 px-6 md:px-12">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-slate-900 mb-4">하나의 공간에서 완성되는 작업 흐름</h2>
+          <p class="text-slate-500">개인의 파일 관리부터 팀 프로젝트 문서 작성까지 완벽하게 지원합니다.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-hard-drive"></i>
             </div>
-            <div class="flex-1 p-10 space-y-6">
-              <div class="h-10 w-48 bg-gray-200 rounded-lg"></div>
-              <div class="grid grid-cols-3 gap-6">
-                <div class="h-40 bg-white rounded-2xl border border-gray-200 shadow-sm"></div>
-                <div class="h-40 bg-white rounded-2xl border border-gray-200 shadow-sm"></div>
-                <div class="h-40 bg-white rounded-2xl border border-gray-200 shadow-sm"></div>
-              </div>
-            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">강력한 드라이브</h3>
+            <p class="text-slate-500 leading-relaxed">모든 파일을 안전하게 저장하고, 직관적인 폴더 구조와 강력한 검색으로 빠르게 찾아보세요.</p>
           </div>
-          <span class="relative z-10 text-gray-300 font-black text-5xl tracking-tighter"
-            >DASHBOARD PREVIEW</span
-          >
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group">
+            <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">실시간 협업 페이지</h3>
+            <p class="text-slate-500 leading-relaxed">팀원들과 동시에 문서를 편집하고 의견을 나누세요. 블록 기반 에디터로 자유롭게 문서를 구성합니다.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group">
+            <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">통합 워크스페이스</h3>
+            <p class="text-slate-500 leading-relaxed">프로젝트별로 공간을 나누고 팀원을 초대하여 권한을 관리하세요. 모든 자료가 한곳에 모입니다.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-6 pb-40 grid md:grid-cols-3 gap-8">
-      <div
-        class="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all group"
-      >
-        <div
-          class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition"
-        >
-          📁
+    <section class="py-24 px-6 md:px-12 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
+      <div class="md:w-1/2 order-2 md:order-1">
+        <div class="p-2 bg-slate-100 rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
+          <img src="@/assets/images/Drive.png" alt="FileInNOut Drive Interface" class="w-full rounded-xl border border-slate-200/50">
         </div>
-        <h3 class="text-xl font-bold mb-4 text-gray-900 group-hover:text-blue-600 transition">
-          워크스페이스 저장소
-        </h3>
-        <p class="text-gray-500 text-sm leading-relaxed">
-          구글 드라이브와 같은 익숙한 파일 관리 기능을 제공합니다. 그리드 뷰와 리스트 뷰를 통해
-          자유롭게 파일을 탐색하세요.
-        </p>
       </div>
-
-      <div
-        class="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all group"
-      >
-        <div
-          class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition"
-        >
-          💬
-        </div>
-        <h3 class="text-xl font-bold mb-4 text-gray-900 group-hover:text-blue-600 transition">
-          끊김 없는 소통
-        </h3>
-        <p class="text-gray-500 text-sm leading-relaxed">
-          화면을 전환할 필요가 없습니다. 우측 채팅 사이드바에서 팀원들과 실시간으로 피드백을
-          주고받으세요.
+      <div class="md:w-1/2 order-1 md:order-2 space-y-6">
+        <span class="text-blue-600 font-bold text-sm uppercase tracking-wider">스마트 드라이브</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">흩어진 파일을<br>한눈에 관리하세요</h2>
+        <p class="text-lg text-slate-500 leading-relaxed">
+          직관적인 인터페이스로 개인 파일부터 팀 공유 문서까지 손쉽게 관리할 수 있습니다. 즐겨찾기, 최근 문서함, 강력한 검색 기능으로 필요한 자료에 즉시 접근하세요.
         </p>
-      </div>
-
-      <div
-        class="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all group"
-      >
-        <div
-          class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition"
-        >
-          👥
-        </div>
-        <h3 class="text-xl font-bold mb-4 text-gray-900 group-hover:text-blue-600 transition">
-          팀과 함께하는 편집
-        </h3>
-        <p class="text-gray-500 text-sm leading-relaxed">
-          개인 페이지부터 공유 워크스페이스까지. 노션처럼 문서를 작성하고 공유하여 실시간 협업의
-          속도를 높이세요.
-        </p>
+        <ul class="space-y-3 text-slate-600 font-medium">
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> 직관적인 폴더 및 파일 관리</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> 팀원 간 간편한 문서 공유 및 권한 설정</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500"></i> 모든 파일 형식 지원 및 미리보기</li>
+        </ul>
       </div>
     </section>
 
-    <footer class="bg-white border-t border-gray-100 py-16 px-10 text-center">
-      <div class="flex items-center justify-center gap-2 mb-6">
-        <div
-          class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-blue-200"
-        >
-          F
+    <section class="py-24 px-6 md:px-12 bg-slate-50">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
+        <div class="md:w-1/2 space-y-6">
+          <span class="text-indigo-600 font-bold text-sm uppercase tracking-wider">실시간 협업 페이지</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">아이디어 공유와 문서 작성을<br>위한 살아있는 공간</h2>
+          <p class="text-lg text-slate-500 leading-relaxed">
+            팀원들과 동시에 접속하여 문서를 작성하고 댓글로 피드백을 주고받으세요. 텍스트, 이미지, 할 일 목록 등 다양한 블록을 레고처럼 조합하여 자유롭게 페이지를 구성할 수 있습니다.
+          </p>
+          <ul class="space-y-3 text-slate-600 font-medium">
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-indigo-500"></i> 다자간 실시간 동시 편집 지원</li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-indigo-500"></i> 직관적인 블록 기반 문서 에디터</li>
+            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-indigo-500"></i> 드라이브 파일과 문서의 완벽한 연결</li>
+          </ul>
         </div>
-        <span class="font-bold text-lg tracking-tight text-gray-900">FileInNOut</span>
+        <div class="md:w-1/2">
+          <div class="p-2 bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-1 transition-transform duration-300 border border-slate-100">
+            <img src="@/assets/images/Editor.png" alt="FileInNOut Collaboration Editor" class="w-full rounded-xl border border-slate-50">
+            </div>
+        </div>
       </div>
-      <p class="text-gray-400 text-xs mb-4">© 2026 FileInNOut Inc. All rights reserved.</p>
-      <div class="flex justify-center gap-6 text-xs text-gray-400">
-        <a href="#" class="hover:text-blue-600">개인정보처리방침</a>
-        <a href="#" class="hover:text-blue-600">이용약관</a>
-        <a href="#" class="hover:text-blue-600">문의하기</a>
-      </div>
+    </section>
+
+    <section class="py-32 px-6 md:px-12 text-center bg-slate-900 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        <div class="relative z-10 max-w-3xl mx-auto">
+          <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">더 이상 여러 도구를<br>오갈 필요가 없습니다.</h2>
+          <p class="text-lg text-slate-300 mb-10 leading-relaxed">
+              FileInNOut 하나로 파일 관리와 팀 협업을 통합하고,<br class="hidden md:block"> 가장 생산적인 업무 환경을 경험해보세요.
+          </p>
+          <button class="bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-400 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+              지금 무료로 시작하기
+          </button>
+        </div>
+    </section>
+
+    <footer class="py-12 px-6 md:px-12 border-t border-slate-100 text-center md:text-left">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 font-bold text-lg text-slate-800">
+                <i class="fa-solid fa-cloud-arrow-up text-blue-600"></i>
+                <span>FileInNOut</span>
+            </div>
+            <div class="flex gap-6 text-sm text-slate-500 font-medium">
+                <a href="#" class="hover:text-blue-600 transition-colors">개인정보처리방침</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">이용약관</a>
+                <a href="#" class="hover:text-blue-600 transition-colors">문의하기</a>
+            </div>
+            <p class="text-xs text-slate-400">© 2024 FileInNOut Inc. All rights reserved.</p>
+        </div>
     </footer>
   </div>
 </template>
+
+<style>
+/* Font Awesome CDN을 불러와야 아이콘이 정상적으로 보입니다. */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css");
+</style>
