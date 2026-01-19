@@ -147,15 +147,37 @@ const getInputClass = (field) => {
       class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full max-w-[480px] p-8 md:p-12 z-10">
       <!-- Header Section -->
       <div class="text-center mb-10">
-        <div
-          class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-          </svg>
-        </div>
-        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">FileInNOut</h1>
+        <router-link
+          to="/"
+          class="inline-flex flex-col items-center cursor-pointer group"
+        >
+          <div
+            class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 mb-6
+                  group-hover:bg-indigo-700 transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-8 h-8 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+              />
+            </svg>
+          </div>
+
+          <h1
+            class="text-3xl font-extrabold text-gray-900 tracking-tight group-hover:text-indigo-700 transition"
+          >
+            FileInNOut
+          </h1>
+        </router-link>
+
         <p class="text-gray-500 mt-2 font-medium">나만의 워크스페이스를 시작하세요</p>
       </div>
 
