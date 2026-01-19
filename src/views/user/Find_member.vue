@@ -56,7 +56,6 @@ const goBack = () => {
 
 <template>
   <div class="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-    
     <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[500px] h-[650px] bg-white rounded-2xl shadow-xl p-8 overflow-hidden font-sans">
       <button 
         v-if="currentStep !== 'main'" 
@@ -66,7 +65,7 @@ const goBack = () => {
         <i class="fa-solid fa-chevron-left text-lg"></i>
       </button>
 
-      <div class="text-center mb-2">
+      <div class="text-center mb-10">
         <div
           class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 mb-6">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24"
@@ -77,8 +76,6 @@ const goBack = () => {
         </div>
         <h1 class="text-2xl font-bold text-slate-800 tracking-tight">FileInNOut</h1>
         <p class="text-slate-400 text-sm mt-1 font-medium">{{ pageTitle }}</p>
-        <br>
-  <br>
       </div>
 
       <div v-if="currentStep === 'main'" class="space-y-4">
