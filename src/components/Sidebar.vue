@@ -7,16 +7,26 @@ const isSharedOpen = ref(true)
 
 const personalItems = ['SSL 인증서', '포트폴리오', 'Vue 학습']
 const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth' // 부드럽게 올라가는 효과 (원치 않으면 'auto'로 변경)
+  });
+}
 </script>
 
 <template>
   <aside class="sidebar-container">
-    <div class="p-6 flex items-center gap-3">
+    <RouterLink 
+      :to="{ name: 'home' }" 
+      class="logo-wrapper"
+      @click="scrollToTop"
+    >
       <div class="logo-icon">
         <span class="text-white font-bold text-lg">F</span>
       </div>
       <span class="logo-text">FileInNOut</span>
-    </div>
+    </RouterLink>
 
     <nav class="sidebar-nav">
       <div class="mb-6">
@@ -139,6 +149,42 @@ const sharedItems = ['한화 부트캠프 24기', '프로젝트 팀A']
 </template>
 
 <style scoped>
+.logo-wrapper {
+  /* 기존 p-6과 동일하게 맞추되, 상하 여백만 살짝 조정 */
+  padding: 1.5rem 1.5rem 1rem 1.5rem; 
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.logo-wrapper:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: #2563eb;
+  border-radius: 0.5rem;
+  /* flex-shrink: 0 을 추가하면 글자가 길어져도 아이콘이 찌그러지지 않습니다 */
+  flex-shrink: 0; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 1.15rem; /* 크기를 살짝 조정 */
+  color: var(--text-main);
+  letter-spacing: -0.025em;
+  /* RouterLink 기본 색상 방지 */
+  text-decoration: none; 
+}
+
 /* 사이드바 컨테이너 */
 .sidebar-container {
   width: 16rem;
