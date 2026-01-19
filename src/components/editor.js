@@ -9,39 +9,43 @@ import { WebsocketProvider } from 'y-websocket'
 // Quill 모듈 등록
 Quill.register('modules/cursors', QuillCursors)
 
+// [공유 상태] 컴포저블 간 데이터 공유를 위해 최상단에 선언
 let quill = null
+const title = ref('') 
+const hasContent = ref(false) 
+const remoteMice = ref({})
 
 export function useEditorSocket() {
-  const title = ref('') // 제목 반응형 데이터
-  const remoteMice = ref({}) // 다른 사용자들의 마우스 위치
-  let quill = null
   let ydoc = null
   let provider = null
 
+  // 사용자 색상 팔레트
   const colorPalette = [
-    '#FF0000', // 빨강
-    '#FF7F00', // 주황
-    '#FFFF00', // 노랑
-    '#00FF00', // 초록
-    '#0000FF', // 파랑
-    '#4B0082', // 남색
-    '#8B00FF', // 보라
-    '#FF1493', // 핑크 (8번)
-    '#00CED1', // 민트 (9번)
-    '#ADFF2F', // 연두 (10번)
+    '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF',
+    '#4B0082', '#8B00FF', '#FF1493', '#00CED1', '#ADFF2F',
   ]
 
-  const myNumber = Math.floor(Math.random() * 10) // 1~10
+  // 랜덤 사용자 설정 (아이디/색상/이름)
+  const myNumber = Math.floor(Math.random() * 10) 
   const myColor = colorPalette[myNumber]
   const myName = `사용자 ${myNumber + 1}`
 
-  // 에디터 및 소켓 초기화 함수 (onMounted 제거됨)
+  // 마우스 이동 이벤트 핸들러 (unmounted 시 제거를 위해 별도 선언)
+  const handleMouseMove = (e) => {
+    if (provider?.awareness) {
+      provider.awareness.setLocalStateField('mouse', {
+        left: e.clientX,
+        top: e.clientY,
+      })
+    }
+  }
+
   const initEditor = (elementId, roomName = 'default-room') => {
     if (!roomName) roomName = 'default-room'
 
     ydoc = new Y.Doc()
     provider = new WebsocketProvider(
-      'wss://www.cheeseduck.kro.kr/:1234', // 서버가 y-websocket 프로토콜을 지원해야 함
+      'http://localhost:1234', 
       roomName,
       ydoc,
     )
@@ -65,11 +69,17 @@ export function useEditorSocket() {
       },
     })
 
-    // 3. Yjs-Quill 바인딩 (이 부분이 핵심: 자동 동기화)
+    // 2. [저장 버튼 로직] 본문 내용 변화 감지 (한 글자라도 있으면 true)
+    quill.on('text-change', () => {
+      const text = quill.getText().trim()
+      hasContent.value = text.length > 0
+    })
+
+    // 3. Yjs-Quill 자동 동기화 바인딩
     const ytext = ydoc.getText('quill')
     new QuillBinding(ytext, quill, provider.awareness)
 
-    // 3. 제목 동기화
+    // 4. 제목 실시간 동기화 (Yjs 관찰)
     const yTitle = ydoc.getText('title')
     yTitle.observe(() => {
       if (title.value !== yTitle.toString()) title.value = yTitle.toString()
@@ -83,60 +93,60 @@ export function useEditorSocket() {
       }
     })
 
-    // 3. 마우스 위치 공유 (Awareness 활용)
-    // 내 마우스 움직임을 다른 사람에게 전송
-    window.addEventListener('mousemove', (e) => {
-      if (provider?.awareness) {
-        provider.awareness.setLocalStateField('mouse', {
-          x: e.clientX,
-          y: e.clientY,
-          name: myName,
-          color: myColor,
-        })
-      }
-    })
-    // 다른 사람들의 마우스 위치 변화 감지
-    provider.awareness.on('update', () => {
-      const states = provider.awareness.getStates()
-      const mice = {}
-      states.forEach((state, clientID) => {
-        if (clientID !== ydoc.clientID && state.mouse) {
-          mice[clientID] = state.mouse
-        }
-      })
-      remoteMice.value = mice
-    })
-    // 4. 커서(Awareness) 정보 설정
+    // 5. [마우스 커서 로직] 내 정보 설정 및 이벤트 등록
     provider.awareness.setLocalStateField('user', {
       name: myName,
       color: myColor,
     })
 
-    console.log(remoteMice.value)
+    window.addEventListener('mousemove', handleMouseMove)
+
+    // 6. [마우스 커서 로직] 다른 사용자 정보 수집
+    provider.awareness.on('update', () => {
+      const states = provider.awareness.getStates()
+      const mice = {}
+      states.forEach((state, clientID) => {
+        // 내 마우스가 아니고, 위치 정보와 사용자 정보가 모두 있을 때만 추가
+        if (clientID !== ydoc.clientID && state.mouse && state.user) {
+          mice[clientID] = {
+            left: state.mouse.left,
+            top: state.mouse.top,
+            name: state.user.name,
+            color: state.user.color
+          }
+        }
+      })
+      remoteMice.value = mice
+    })
   }
-  // 컴포넌트 언마운트 시 소켓 정리
+
+  // 컴포넌트 언마운트 시 소켓 및 이벤트 정리
   onUnmounted(() => {
+    window.removeEventListener('mousemove', handleMouseMove)
+    // [핵심 수정] 나갈 때 내 상태를 null로 만들어 다른 사람에게 알림
+    if (provider?.awareness) {
+        provider.awareness.setLocalState(null)
+    }
     if (provider) provider.destroy()
-    if (ydoc) ydoc.destroy()
+    if (ydoc) ydoc.destroy
   })
+
   return {
     initEditor,
     title,
     remoteMice,
   }
 }
-export function save() {
-  const title = ref('')
 
+export function save() {
+  // [저장 버튼 로직] 제목과 본문이 모두 존재할 때만 활성화
   const isFormValid = computed(() => {
-    const hasTitle = title.value.trim().length > 0
-    const has_content = quill ? quill.getText().trim().length > 0 : false
-    return hasTitle && has_content
+    return title.value.trim().length > 0 && hasContent.value
   })
 
-  // 1. DB에 저장하기 (Save)
-  const savePost = async (quill, title) => {
-    if (!quill || title.value.trim() === '') return
+  const savePost = async () => {
+    // 버튼이 비활성 상태일 때는 실행 방지
+    if (!isFormValid.value) return
 
     const payload = {
       title: title.value,
