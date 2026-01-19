@@ -24,7 +24,6 @@ onMounted (() => {
       </RouterLink>
 
       <div class="flex items-center gap-10 text-sm font-semibold text-gray-500">
-        <a href="#" class="hover:text-blue-600 transition">기능</a>
         <RouterLink :to="{ name: 'payment' }" class="hover:text-blue-600 transition"
           >요금제</RouterLink
         >
