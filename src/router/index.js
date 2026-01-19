@@ -92,9 +92,9 @@ const router = createRouter({
       meta: { title: '결제', requiresAuth: true },
     },
     { 
-      path: '/find_member',
-      name: 'find_member',
-      component: () => import('../views/user/Find_member.vue'),
+      path: '/FindMember',
+      name: 'FindMember',
+      component: () => import('../views/user/FindMember.vue'),
       meta: { title: '회원 찾기', requiresAuth: false },
     },
     // 404 페이지 - 모든 잘못된 경로를 캐치 (반드시 맨 마지막!)

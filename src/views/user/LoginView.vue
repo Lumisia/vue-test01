@@ -231,7 +231,7 @@ const getInputClass = (field) => {
         <p class="text-sm text-gray-500 font-medium">
           아이디나 비밀번호를 잊으셨나요?
           <br />
-          <RouterLink :to="{ name: 'find_member' }"
+          <RouterLink :to="{ name: 'FindMember' }"
             class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">
             아이디 / 비밀번호 찾기
           </RouterLink>
