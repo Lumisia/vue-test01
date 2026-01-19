@@ -10,7 +10,7 @@ import IntrodHeader from '@/components/IntrodHeader.vue';
       <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight">
         모든 파일을 한곳에,<br class="hidden md:block"> 팀 협업을 하나의 페이지에서.
       </h1>
-      <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+      <p class="text-2g text-slate-550 max-w-2xl mx-auto mb-10 leading-relaxed">
         강력한 클라우드 드라이브와 실시간 문서 협업 도구의 결합.<br>
         FileInNOut으로 흩어진 도구들을 하나로 모으고 스마트한 워크플로우를 경험하세요.
       </p>
