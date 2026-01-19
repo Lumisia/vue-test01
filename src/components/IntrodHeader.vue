@@ -37,5 +37,11 @@
 </template>
 
 <style scoped>
-
+nav {
+  background-color: var(--bg-main); /* theme.css의 변수 사용 */
+  border-color: var(--border-color);
+}
+.font-bold {
+  color: var(--text-main);
+}
 </style>
