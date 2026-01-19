@@ -35,14 +35,17 @@ const validateNickname = async () => {
     signupInputError.name.isValid = false
     return
   }
-  
+
   if (!nicknameRegex.test(val)) {
     signupInputError.name.errorMessage = "영문과 숫자를 조합하여 2~12자로 입력해 주세요."
     signupInputError.name.isValid = false
     return
   }
+
+  signupInputError.name.errorMessage = null
+  signupInputError.name.isValid = true
 }
- 
+
 const validateEmail = () => {
   signupInputError.email.touched = true
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -83,7 +86,7 @@ const validatePasswordConfirm = () => {
   if (confirmVal === '') {
     signupInputError.passwordConfirm.errorMessage = "비밀번호를 한 번 더 입력해 주세요."
     signupInputError.passwordConfirm.isValid = false
-  } 
+  }
   // 확인창에서도 동일한 제약 조건 검증 수행
   else if (!pwRegex.test(confirmVal)) {
     signupInputError.passwordConfirm.errorMessage = "유효하지 않은 비밀번호 형식입니다."
@@ -102,8 +105,8 @@ const isFormValid = computed(() => {
   return signupInputError.name.isValid &&
     signupInputError.email.isValid &&
     signupInputError.password.isValid &&
-    signupInputError.passwordConfirm.isValid 
-    
+    signupInputError.passwordConfirm.isValid
+
 })
 
 const handleSignup = async () => {
@@ -135,15 +138,21 @@ const getInputClass = (field) => {
 <template>
   <div class="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6 relative overflow-hidden">
     <!-- Abstract Background Decor -->
-    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-100 rounded-full blur-[120px] opacity-60"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px] opacity-60"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-100 rounded-full blur-[120px] opacity-60">
+    </div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px] opacity-60">
+    </div>
 
-    <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full max-w-[480px] p-8 md:p-12 z-10">
+    <div
+      class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full max-w-[480px] p-8 md:p-12 z-10">
       <!-- Header Section -->
       <div class="text-center mb-10">
-        <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+        <div
+          class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
           </svg>
         </div>
         <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">FileInNOut</h1>
@@ -152,8 +161,10 @@ const getInputClass = (field) => {
 
       <!-- Success State -->
       <div v-if="signupSuccess" class="text-center py-10 animate-fade-in">
-        <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div
+          class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -167,7 +178,8 @@ const getInputClass = (field) => {
         <div class="space-y-1.5">
           <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
             <span>닉네임</span>
-            <span v-if="signupInputError.name.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+            <span v-if="signupInputError.name.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ signupInputError.name.errorMessage }}
             </span>
           </label>
@@ -187,7 +199,8 @@ const getInputClass = (field) => {
         <div class="space-y-1.5">
           <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
             <span>이메일 </span>
-            <span v-if="signupInputError.email.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+            <span v-if="signupInputError.email.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ signupInputError.email.errorMessage }}
             </span>
           </label>
@@ -199,11 +212,13 @@ const getInputClass = (field) => {
         <div class="space-y-1.5">
           <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
             <span>비밀번호 </span>
-            <span v-if="signupInputError.password.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+            <span v-if="signupInputError.password.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ signupInputError.password.errorMessage }}
             </span>
           </label>
-          <input v-model="signupForm.password" @blur="validatePassword" type="password" placeholder="영문, 숫자, 특수문자 조합 8자 이상"
+          <input v-model="signupForm.password" @blur="validatePassword" type="password"
+            placeholder="영문, 숫자, 특수문자 조합 8자 이상"
             :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('password')]">
         </div>
 
@@ -211,11 +226,13 @@ const getInputClass = (field) => {
         <div class="space-y-1.5">
           <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
             <span>비밀번호 확인</span>
-            <span v-if="signupInputError.passwordConfirm.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+            <span v-if="signupInputError.passwordConfirm.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ signupInputError.passwordConfirm.errorMessage }}
             </span>
           </label>
-          <input v-model="signupForm.passwordConfirm" @blur="validatePasswordConfirm" type="password" placeholder="비밀번호를 다시 입력하세요"
+          <input v-model="signupForm.passwordConfirm" @blur="validatePasswordConfirm" type="password"
+            placeholder="비밀번호를 다시 입력하세요"
             :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('passwordConfirm')]">
         </div>
 
@@ -224,9 +241,12 @@ const getInputClass = (field) => {
           class="w-full relative bg-indigo-600 disabled:bg-gray-200 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all transform hover:translate-y-[-1px] active:translate-y-[0] shadow-lg shadow-indigo-100 mt-6">
           <span v-if="!isLoading">가입하기</span>
           <div v-else class="flex items-center justify-center">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
             </svg>
           </div>
         </button>
@@ -235,7 +255,8 @@ const getInputClass = (field) => {
       <div class="text-center mt-8">
         <p class="text-sm text-gray-500 font-medium">
           이미 계정이 있으신가요?
-          <RouterLink to="/login" class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">로그인</RouterLink>
+          <RouterLink to="/login" class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">로그인
+          </RouterLink>
         </p>
       </div>
     </div>
@@ -243,9 +264,37 @@ const getInputClass = (field) => {
 </template>
 
 <style scoped>
-@keyframes slide-down { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-.animate-slide-down { animation: slide-down 0.2s ease-out forwards; }
-.animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
-input { -webkit-tap-highlight-color: transparent; }
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+input {
+  -webkit-tap-highlight-color: transparent;
+}
 </style>
