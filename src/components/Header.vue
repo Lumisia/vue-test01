@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import ProfileModal from './ProfileModal.vue'
 
@@ -7,10 +7,23 @@ import ProfileModal from './ProfileModal.vue'
 const emit = defineEmits(['toggle-chat', 'toggle-theme', 'switch-view'])
 
 const authStore = useAuthStore()
-const userName = ref('')
+// authStore.user 안의 name(또는 userName)을 실시간으로 가져옵니다.
+// 서버 응답 필드명이 'name'인지 'userName'인지 확인하여 맞춰주세요.
+const userName = computed(() => {
+  return authStore.user?.userName || authStore.user?.name || '사용자'
+})
+const userEmail = computed(() => {
+  // 서버 응답 필드명에 따라 user.email 또는 user.userEmail 등을 확인하세요
+  return authStore.user?.email || authStore.user?.userEmail || '이메일 정보 없음'
+})
+onMounted(() => {
+  initTheme()
+  authStore.checkLogin() // 저장된 정보가 있다면 불러오기
+  document.addEventListener('click', handleClickOutside)
+})
 
 // 드롭다운 상태
-const showNotifDropdown = ref(false)
+const showNotifDropdown = ref(false)  
 const showProfileDropdown = ref(false)
 
 // 모달 상태
@@ -167,7 +180,7 @@ onBeforeUnmount(() => {
         <div class="relative" id="profile-container">
           <div @click="toggleProfileMenu" class="flex items-center gap-3 cursor-pointer group">
             <div class="text-right hidden md:block">
-              <p class="text-sm font-bold text-[var(--text-main)]">{{ userName || '뷰짱짱' }}</p>
+              <p class="text-sm font-bold text-[var(--text-main)]">{{ userName }}</p>
               <p class="text-[10px] text-[#190094] dark:text-[#44dff4] font-bold">존나 비싼 요금제 오너</p>
             </div>
             <img src="https://ui-avatars.com/api/?name=AB&background=190094&color=fff" class="profile-avatar">
@@ -176,7 +189,7 @@ onBeforeUnmount(() => {
           <div v-if="showProfileDropdown" class="dropdown-container active">
             <div class="dropdown-header">
               <p class="text-xs text-[var(--text-muted)] font-bold">로그인 계정</p>
-              <p class="text-sm font-black mt-1">imran_khan@cloudflow.com</p>
+              <p class="text-sm font-black mt-1">{{userEmail}}</p>
             </div>
             <div class="py-2">
               <div @click="handleOpenProfileModal" class="dropdown-item">
