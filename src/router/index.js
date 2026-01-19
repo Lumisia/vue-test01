@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,7 @@ const router = createRouter({
       name: 'main',
       redirect: '/main/home',
       component: () => import('../views/MainView.vue'),
-      meta: { requiresAuth: true }, // 부모가 true면 자식들도 영향을 받습니다.
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'home',
@@ -70,23 +71,38 @@ const router = createRouter({
           component: () => import('../views/dashboard/StorageView.vue'),
           meta: { title: '저장용량', requiresAuth: true },
         },
-        { path: 'editor', 
+        { 
+          path: 'editor', 
           name: 'editor',
           component: () => import('../views/EditorView.vue'),
-          meta: { title: '에디터', requiresAuth: true} },
+          meta: { title: '에디터', requiresAuth: true }
+        },
+        // /main/* 하위의 잘못된 경로도 404로 보내기
+        {
+          path: ':pathMatch(.*)*',
+          component: NotFound,
+          meta: { title: '404 - 페이지를 찾을 수 없습니다', requiresAuth: false }
+        }
       ],
     },
     { 
       path: '/pay',
       name: 'pay',
       component: () => import('../views/Pay.vue'),
-      meta: { title : '결제', requiresAuth: true }, // 부모가 true면 자식들도 영향을 받습니다.
+      meta: { title: '결제', requiresAuth: true },
     },
     { 
       path: '/find_member',
       name: 'find_member',
       component: () => import('../views/user/Find_member.vue'),
-      meta: { title : '회원 찾기', requiresAuth: true }, // 부모가 true면 자식들도 영향을 받습니다.
+      meta: { title: '회원 찾기', requiresAuth: true },
+    },
+    // 404 페이지 - 모든 잘못된 경로를 캐치 (반드시 맨 마지막!)
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: NotFound,
+      meta: { title: '404 - 페이지를 찾을 수 없습니다', requiresAuth: false }
     }
   ],
 })
@@ -94,7 +110,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   console.log('vue에서 링크를 이동할 때 매번 실행되는 함수')
 
-  document.title = to.meta.title
+  document.title = to.meta.title || 'FileInNOut'
 
   // if (to.meta.requiresAuth) {
   //   if (localStorage.getItem('USERINFO') === null) {
