@@ -5,7 +5,6 @@ import api from '@/api/user'
 
 const router = useRouter()
 const isLoading = ref(false)
-const isCheckingNickname = ref(false)
 const signupSuccess = ref(false)
 
 const signupForm = reactive({
@@ -42,24 +41,8 @@ const validateNickname = async () => {
     signupInputError.name.isValid = false
     return
   }
-
-  // 중복 검사 시뮬레이션 (실제 구현 시 api 호출로 대체)
-  isCheckingNickname.value = true
-  try {
-    // 예시: 특정 키워드 중복 처리
-    await new Promise(res => setTimeout(res, 500))
-    if (['admin', 'test', 'user123'].includes(val.toLowerCase())) {
-      signupInputError.name.errorMessage = "이미 사용 중인 닉네임입니다."
-      signupInputError.name.isValid = false
-    } else {
-      signupInputError.name.errorMessage = null
-      signupInputError.name.isValid = true
-    }
-  } finally {
-    isCheckingNickname.value = false
-  }
 }
-
+ 
 const validateEmail = () => {
   signupInputError.email.touched = true
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -119,8 +102,8 @@ const isFormValid = computed(() => {
   return signupInputError.name.isValid &&
     signupInputError.email.isValid &&
     signupInputError.password.isValid &&
-    signupInputError.passwordConfirm.isValid &&
-    !isCheckingNickname.value
+    signupInputError.passwordConfirm.isValid 
+    
 })
 
 const handleSignup = async () => {
