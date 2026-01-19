@@ -186,12 +186,7 @@ const getInputClass = (field) => {
           <div class="relative">
             <input v-model="signupForm.name" @blur="validateNickname" type="text" placeholder="영문, 숫자 포함 2~12자"
               :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('name')]">
-            <span v-if="isCheckingNickname" class="absolute right-4 top-1/2 -translate-y-1/2">
-              <svg class="animate-spin h-4 w-4 text-indigo-500" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-            </span>
+            
           </div>
         </div>
 
