@@ -3,62 +3,6 @@ import FileTable from '@/components/FileTable.vue'
 
 const homeFiles = [
   {
-    name: '한화 24기_이선엽.jpg',
-    reason: '내가 열어본 항목',
-    owner: '나',
-    location: '내 드라이브',
-    date: '2025. 11. 19.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
-    name: '자주 하는 질문',
-    reason: '자주 열어봄',
-    owner: '나',
-    location: '공유 문서함',
-    date: '2025. 12. 12.',
-  },
-  {
     name: '자주 하는 질문',
     reason: '자주 열어봄',
     owner: '나',
@@ -192,4 +136,4 @@ const downloadFile = (filename) => {
 
     <FileTable :files="homeFiles" />
   </div>
-</template>w
+</template>
