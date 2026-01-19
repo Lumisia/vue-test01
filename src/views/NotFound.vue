@@ -13,89 +13,97 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="notfound-container">
-    <div class="notfound-content">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-main)] p-8 relative overflow-hidden">
+    <div class="max-w-2xl text-center relative z-10 animate-fade-in-up">
       <!-- 404 아이콘 -->
-      <div class="icon-wrapper">
-        <i class="fa-solid fa-cloud-exclamation"></i>
+      <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] rounded-full mb-8 shadow-[0_20px_60px_rgba(240,125,24,0.3)] animate-float">
+        <i class="fa-solid fa-cloud-exclamation text-6xl text-white"></i>
       </div>
 
       <!-- 404 숫자 -->
-      <h1 class="error-code">404</h1>
+      <h1 class="text-[8rem] font-black bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] bg-clip-text text-transparent m-0 leading-none tracking-tighter">
+        404
+      </h1>
 
       <!-- 메시지 -->
-      <h2 class="error-title">페이지를 찾을 수 없습니다</h2>
-      <p class="error-description">
+      <h2 class="text-3xl font-bold text-[var(--text-main)] mt-6 mb-4">
+        페이지를 찾을 수 없습니다
+      </h2>
+      <p class="text-base text-[var(--text-secondary)] leading-relaxed mb-10">
         요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.<br />
         URL을 다시 확인해주세요.
       </p>
 
       <!-- 버튼 그룹 -->
-      <div class="button-group">
-        <button @click="goBack" class="btn btn-secondary">
-          <i class="fa-solid fa-arrow-left"></i>
-          이전 페이지
+      <div class="flex gap-4 justify-center flex-wrap mb-12">
+        <button 
+          @click="goBack" 
+          class="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-xl cursor-pointer transition-all duration-300 border border-[var(--border-color)] bg-[var(--bg-input)] text-[var(--text-main)] hover:bg-[var(--border-color)] hover:-translate-y-0.5 relative overflow-hidden group"
+        >
+          <span class="absolute top-1/2 left-1/2 w-0 h-0 rounded-full bg-white/30 -translate-x-1/2 -translate-y-1/2 transition-all duration-600 group-hover:w-[300px] group-hover:h-[300px]"></span>
+          <i class="fa-solid fa-arrow-left relative z-10"></i>
+          <span class="relative z-10">이전 페이지</span>
         </button>
-        <button @click="goHome" class="btn btn-primary">
-          <i class="fa-solid fa-house"></i>
-          홈으로 가기
+        <button 
+          @click="goHome" 
+          class="inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold rounded-xl cursor-pointer transition-all duration-300 border-none bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] text-white shadow-[0_4px_15px_rgba(240,125,24,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(240,125,24,0.4)] relative overflow-hidden group"
+        >
+          <span class="absolute top-1/2 left-1/2 w-0 h-0 rounded-full bg-white/30 -translate-x-1/2 -translate-y-1/2 transition-all duration-600 group-hover:w-[300px] group-hover:h-[300px]"></span>
+          <i class="fa-solid fa-house relative z-10"></i>
+          <span class="relative z-10">홈으로 가기</span>
         </button>
       </div>
 
       <!-- 추천 링크 -->
-      <div class="quick-links">
-        <p class="quick-links-title">다음 페이지를 찾으시나요?</p>
-        <div class="links-grid">
-          <RouterLink :to="{ name: 'home' }" class="quick-link">
-            <i class="fa-solid fa-house"></i>
+      <div class="bg-[var(--bg-main)] border border-[var(--border-color)] rounded-2xl p-8 shadow-[var(--shadow-lg)]">
+        <p class="text-sm font-semibold text-[var(--text-muted)] mb-5 uppercase tracking-wider">
+          다음 페이지를 찾으시나요?
+        </p>
+        <div class="grid grid-cols-2 gap-4">
+          <RouterLink 
+            :to="{ name: 'home' }" 
+            class="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-main)] text-sm font-medium transition-all duration-300 no-underline hover:bg-[var(--bg-input)] hover:border-[var(--accent)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(240,125,24,0.15)]"
+          >
+            <i class="fa-solid fa-house text-xl text-[var(--accent)]"></i>
             <span>홈</span>
           </RouterLink>
-          <RouterLink :to="{ name: 'drive' }" class="quick-link">
-            <i class="fa-brands fa-google-drive"></i>
+          <RouterLink 
+            :to="{ name: 'drive' }" 
+            class="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-main)] text-sm font-medium transition-all duration-300 no-underline hover:bg-[var(--bg-input)] hover:border-[var(--accent)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(240,125,24,0.15)]"
+          >
+            <i class="fa-brands fa-google-drive text-xl text-[var(--accent)]"></i>
             <span>내 드라이브</span>
           </RouterLink>
-          <RouterLink :to="{ name: 'shareFile' }" class="quick-link">
-            <i class="fa-solid fa-people-group"></i>
+          <RouterLink 
+            :to="{ name: 'shareFile' }" 
+            class="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-main)] text-sm font-medium transition-all duration-300 no-underline hover:bg-[var(--bg-input)] hover:border-[var(--accent)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(240,125,24,0.15)]"
+          >
+            <i class="fa-solid fa-people-group text-xl text-[var(--accent)]"></i>
             <span>공유 문서함</span>
           </RouterLink>
-          <RouterLink :to="{ name: 'trash' }" class="quick-link">
-            <i class="fa-solid fa-trash"></i>
+          <RouterLink 
+            :to="{ name: 'trash' }" 
+            class="flex items-center gap-3 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--text-main)] text-sm font-medium transition-all duration-300 no-underline hover:bg-[var(--bg-input)] hover:border-[var(--accent)] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(240,125,24,0.15)]"
+          >
+            <i class="fa-solid fa-trash text-xl text-[var(--accent)]"></i>
             <span>휴지통</span>
           </RouterLink>
         </div>
       </div>
 
       <!-- 장식 요소 -->
-      <div class="floating-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
+      <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-[1]">
+        <div class="absolute w-[300px] h-[300px] -top-[150px] -left-[150px] rounded-full bg-[var(--accent)] opacity-5 animate-float-shape"></div>
+        <div class="absolute w-[200px] h-[200px] -bottom-[100px] -right-[100px] rounded-full bg-[var(--accent)] opacity-5 animate-float-shape-delayed-1"></div>
+        <div class="absolute w-[150px] h-[150px] top-1/2 right-[10%] rounded-full bg-[var(--accent)] opacity-5 animate-float-shape-delayed-2"></div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.notfound-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-main) 100%);
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.notfound-content {
-  max-width: 600px;
-  text-align: center;
-  position: relative;
-  z-index: 10;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
+/* 커스텀 애니메이션 */
+@keyframes fade-in-up {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -104,25 +112,6 @@ const goBack = () => {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* 아이콘 */
-.icon-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-  border-radius: 50%;
-  margin-bottom: 2rem;
-  box-shadow: 0 20px 60px rgba(240, 125, 24, 0.3);
-  animation: float 3s ease-in-out infinite;
-}
-
-.icon-wrapper i {
-  font-size: 3.5rem;
-  color: white;
 }
 
 @keyframes float {
@@ -134,203 +123,7 @@ const goBack = () => {
   }
 }
 
-/* 404 텍스트 */
-.error-code {
-  font-size: 8rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  text-shadow: 0 10px 30px rgba(240, 125, 24, 0.2);
-}
-
-.error-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin: 1.5rem 0 1rem;
-}
-
-.error-description {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
-}
-
-/* 버튼 */
-.button-group {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.btn:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(240, 125, 24, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(240, 125, 24, 0.4);
-}
-
-.btn-secondary {
-  background-color: var(--bg-input);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-  background-color: var(--border-color);
-  transform: translateY(-2px);
-}
-
-.btn i {
-  position: relative;
-  z-index: 1;
-}
-
-.btn span {
-  position: relative;
-  z-index: 1;
-}
-
-/* 빠른 링크 */
-.quick-links {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: var(--shadow-lg);
-}
-
-.quick-links-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.links-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.quick-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  color: var(--text-main);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.quick-link:hover {
-  background-color: var(--bg-input);
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(240, 125, 24, 0.15);
-}
-
-.quick-link i {
-  font-size: 1.25rem;
-  color: var(--accent);
-}
-
-/* 장식 요소 */
-.floating-shapes {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.shape {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.05;
-  animation: floatShape 20s ease-in-out infinite;
-}
-
-.shape-1 {
-  width: 300px;
-  height: 300px;
-  top: -150px;
-  left: -150px;
-  animation-delay: 0s;
-}
-
-.shape-2 {
-  width: 200px;
-  height: 200px;
-  bottom: -100px;
-  right: -100px;
-  animation-delay: 5s;
-}
-
-.shape-3 {
-  width: 150px;
-  height: 150px;
-  top: 50%;
-  right: 10%;
-  animation-delay: 10s;
-}
-
-@keyframes floatShape {
+@keyframes float-shape {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg);
   }
@@ -342,28 +135,30 @@ const goBack = () => {
   }
 }
 
-/* 반응형 */
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-shape {
+  animation: float-shape 20s ease-in-out infinite;
+}
+
+.animate-float-shape-delayed-1 {
+  animation: float-shape 20s ease-in-out infinite 5s;
+}
+
+.animate-float-shape-delayed-2 {
+  animation: float-shape 20s ease-in-out infinite 10s;
+}
+
+/* 반응형 (Tailwind로 처리하기 어려운 부분) */
 @media (max-width: 768px) {
-  .error-code {
+  h1 {
     font-size: 5rem;
-  }
-
-  .error-title {
-    font-size: 1.5rem;
-  }
-
-  .button-group {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .links-grid {
-    grid-template-columns: 1fr;
   }
 }
 </style>
