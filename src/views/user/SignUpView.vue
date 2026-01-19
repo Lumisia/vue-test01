@@ -135,7 +135,7 @@ const getInputClass = (field) => {
               d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
           </svg>
         </div>
-        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Workspace Pro</h1>
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">FileInNOut</h1>
         <p class="text-gray-500 mt-2 font-medium">나만의 워크스페이스를 시작하세요</p>
       </div>
 
