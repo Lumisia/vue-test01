@@ -1,15 +1,58 @@
+<script setup>
+import { ref } from 'vue'
+import IntrodHeader from '@/components/IntrodHeader.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const isYearly = ref(false)
+const selectedPlan = ref('Professional') // 기본 선택값
+
+// Pay.vue로 이동하며 데이터 전달
+const goToPay = (plan) => {
+  // 무료 플랜(Starter)은 결제 페이지로 가지 않음
+  if (plan.monthlyPrice === 0) {
+    alert('이미 사용 중인 플랜입니다.')
+    return
+  }
+  
+  router.push({
+    name: 'pay',
+    query: { 
+      plan: plan.name, 
+      price: isYearly.value ? plan.yearlyPrice : plan.monthlyPrice,
+      period: isYearly.value ? '연간' : '월간'
+    }
+  })
+}
+
+const plans = [
+  {
+    name: 'Starter',
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    description: '개인 사용자를 위한 영구 무료 플랜',
+    features: ['5GB 클라우드 저장소', '최대 3명의 팀 멤버', '기본적인 보안 기능'],
+  },
+  {
+    name: 'Professional',
+    monthlyPrice: 29,
+    yearlyPrice: 24,
+    description: '성장하는 팀과 프리랜서를 위한 강력한 도구',
+    features: ['100GB 클라우드 저장소', '무제한 팀 멤버', '고급 분석 대시보드', '24/7 우선 기술 지원'],
+  },
+  {
+    name: 'Enterprise',
+    monthlyPrice: 99,
+    yearlyPrice: 89,
+    description: '대규모 조직을 위한 커스텀 보안 및 관리',
+    features: ['저장소 용량 무제한', '엔터프라이즈급 SSO 보안', '전담 계정 관리자 배정', '커스텀 API 통합 지원'],
+  },
+]
+</script>
+
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-800 font-sans pb-20">
-    <nav class="flex items-center justify-between px-10 py-5 bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 bg-blue-600 rounded-lg shadow-lg shadow-blue-200 flex items-center justify-center text-white font-bold text-xl">F</div>
-        <span class="font-bold text-2xl tracking-tight text-gray-900">FileInNOut</span>
-      </div>
-      <div class="flex items-center gap-6 text-sm font-semibold">
-        <RouterLink :to="{ name: 'login' }" class="text-gray-500 hover:text-blue-600">로그인</RouterLink>
-        <RouterLink :to="{ name: 'signup' }" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">무료로 시작하기</RouterLink>
-      </div>
-    </nav>
+  <div class="min-h-screen bg-gray-50 text-gray-800 font-sans selection:bg-blue-100">
+    <IntrodHeader></IntrodHeader>
 
     <header class="text-center py-20 px-6">
       <p class="text-blue-600 font-bold text-sm tracking-widest uppercase mb-4">Pricing Plans</p>
@@ -89,54 +132,3 @@
     </section>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const isYearly = ref(false)
-const selectedPlan = ref('Professional') // 기본 선택값
-
-// Pay.vue로 이동하며 데이터 전달
-const goToPay = (plan) => {
-  // 무료 플랜(Starter)은 결제 페이지로 가지 않음
-  if (plan.monthlyPrice === 0) {
-    alert('이미 사용 중인 플랜입니다.')
-    return
-  }
-  
-  router.push({
-    name: 'pay',
-    query: { 
-      plan: plan.name, 
-      price: isYearly.value ? plan.yearlyPrice : plan.monthlyPrice,
-      period: isYearly.value ? '연간' : '월간'
-    }
-  })
-}
-
-const plans = [
-  {
-    name: 'Starter',
-    monthlyPrice: 0,
-    yearlyPrice: 0,
-    description: '개인 사용자를 위한 영구 무료 플랜',
-    features: ['5GB 클라우드 저장소', '최대 3명의 팀 멤버', '기본적인 보안 기능'],
-  },
-  {
-    name: 'Professional',
-    monthlyPrice: 29,
-    yearlyPrice: 24,
-    description: '성장하는 팀과 프리랜서를 위한 강력한 도구',
-    features: ['100GB 클라우드 저장소', '무제한 팀 멤버', '고급 분석 대시보드', '24/7 우선 기술 지원'],
-  },
-  {
-    name: 'Enterprise',
-    monthlyPrice: 99,
-    yearlyPrice: 89,
-    description: '대규모 조직을 위한 커스텀 보안 및 관리',
-    features: ['저장소 용량 무제한', '엔터프라이즈급 SSO 보안', '전담 계정 관리자 배정', '커스텀 API 통합 지원'],
-  },
-]
-</script>
