@@ -62,12 +62,10 @@ const handleLogin = async () => {
     if (res.status === 200) {
       authStore.login(JSON.stringify(res.data))
       router.push({ name: 'main' })
-    } else {
-      loginErrorMessage.value = '아이디 또는 비밀번호가 일치하지 않습니다.'
-    }
+    } 
   }
   catch (error) {
-    loginErrorMessage.value = '서버와의 통신 중 오류가 발생했습니다.'
+    loginErrorMessage.value = '아이디 또는 비밀번호가 일치하지 않습니다.'
   } finally {
     isLoading.value = false
   }
@@ -78,7 +76,7 @@ const getInputClass = (field) => {
   const state = loginInputError[field]
   if (!state.touched) return 'border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20'
   return state.isValid
-    ? 'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-500/20'
+    ? 'border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20'
     : 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
 }
 </script>
