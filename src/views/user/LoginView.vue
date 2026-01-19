@@ -62,7 +62,7 @@ const handleLogin = async () => {
     if (res.status === 200) {
       authStore.login(JSON.stringify(res.data))
       router.push({ name: 'main' })
-    } 
+    }
   }
   catch (error) {
     loginErrorMessage.value = '아이디 또는 비밀번호가 일치하지 않습니다.'
@@ -133,24 +133,17 @@ const getInputClass = (field) => {
           <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
             <span>이메일</span>
 
-            <span
-              v-if="loginInputError.email.errorMessage"
-              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down"
-            >
+            <span v-if="loginInputError.email.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ loginInputError.email.errorMessage }}
             </span>
           </label>
 
-          <input
-            v-model="loginForm.email"
-            @blur="validateEmail"
-            type="email"
-            placeholder="workspace@example.com"
+          <input v-model="loginForm.email" @blur="validateEmail" type="email" placeholder="workspace@example.com"
             :class="[
               'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
               getInputClass('email')
-            ]"
-          />
+            ]" />
         </div>
 
 
@@ -161,26 +154,18 @@ const getInputClass = (field) => {
             <span>비밀번호</span>
 
             <!-- 에러 메시지 -->
-            <span
-              v-if="loginInputError.password.errorMessage"
-              class="ml-auto mr-3 text-rose-500 text-[11px] font-bold animate-slide-down"
-            >
+            <span v-if="loginInputError.password.errorMessage"
+              class="ml-auto mr-3 text-rose-500 text-[11px] font-bold animate-slide-down">
               {{ loginInputError.password.errorMessage }}
             </span>
 
-            
+
           </label>
 
-          <input
-            v-model="loginForm.password"
-            @blur="validatePassword"
-            type="password"
-            placeholder="••••••••"
-            :class="[
-              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
-              getInputClass('password')
-            ]"
-          />
+          <input v-model="loginForm.password" @blur="validatePassword" type="password" placeholder="••••••••" :class="[
+            'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+            getInputClass('password')
+          ]" />
         </div>
 
 
@@ -217,18 +202,17 @@ const getInputClass = (field) => {
       <div class="text-center mt-10">
         <p class="text-sm text-gray-500 font-medium">
           아직 회원이 아니신가요?
-          <RouterLink to="/signup" class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">회원가입
+          <RouterLink :to="{ name: 'signup' }"
+            class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">회원가입
           </RouterLink>
         </p>
         <p class="text-sm text-gray-500 font-medium">
           아이디나 비밀번호를 잊으셨나요?
-          <br/>
-            <RouterLink
-              to="/find_member"
-              class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors"
-            >
-              아이디 / 비밀번호 찾기
-            </RouterLink>
+          <br />
+          <RouterLink :to="{ name: 'find_member' }"
+            class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">
+            아이디 / 비밀번호 찾기
+          </RouterLink>
         </p>
       </div>
     </div>
