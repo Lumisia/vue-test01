@@ -112,7 +112,7 @@ const scrollToTop = () => {
             :key="team"
             class="sidebar-item"
           >
-            <span class="text-xs text-blue-500">●</span> {{ team }}
+            <i class="fa-solid fa-file-lines"></i>  {{ team }}
           </div>
         </div>
         
