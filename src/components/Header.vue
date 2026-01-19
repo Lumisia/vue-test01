@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import ProfileModal from './ProfileModal.vue'
 
 
 const emit = defineEmits(['toggle-chat', 'toggle-theme', 'switch-view'])
-
+const router = useRouter()
 const authStore = useAuthStore()
 // authStore.user 안의 name(또는 userName)을 실시간으로 가져옵니다.
 // 서버 응답 필드명이 'name'인지 'userName'인지 확인하여 맞춰주세요.
@@ -105,7 +106,8 @@ const handleSaveProfile = () => {
 // 로그아웃
 const handleLogout = () => {
   if (confirm("로그아웃 하시겠습니까?")) {
-    location.reload()
+    authStore.logout() // 스토어에서 만든 logout 함수 호출 (이전 가이드 참고)
+    router.push('/login') // 로그인 페이지로 이동
   }
 }
 
