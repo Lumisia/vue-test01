@@ -156,58 +156,110 @@ const getInputClass = (field) => {
       <form v-else @submit.prevent="handleSignup" class="space-y-5" novalidate>
         <!-- Nickname -->
         <div class="space-y-1.5">
-          <label class="text-sm font-bold text-gray-700 ml-1">닉네임</label>
+          <!-- label + error 한 줄 -->
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>닉네임</span>
+
+            <span
+              v-if="signupInputError.name.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down"
+            >
+              {{ signupInputError.name.errorMessage }}
+            </span>
+          </label>
+
+          <!-- input + 아이콘 -->
           <div class="relative">
-            <input v-model="signupForm.name" @blur="validateNickname" type="text" placeholder="예: 홍길동"
-              :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('name')]" />
-            <span v-if="signupInputError.name.touched" class="absolute right-4 top-1/2 -translate-y-1/2">
+            <input
+              v-model="signupForm.name"
+              @blur="validateNickname"
+              type="text"
+              placeholder="예: 홍길동"
+              :class="[
+                'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+                getInputClass('name')
+              ]"
+            />
+
+            <span
+              v-if="signupInputError.name.touched"
+              class="absolute right-4 top-1/2 -translate-y-1/2"
+            >
               <span v-if="signupInputError.name.isValid" class="text-emerald-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd"
+                  <path
+                    fill-rule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clip-rule="evenodd" />
+                    clip-rule="evenodd"
+                  />
                 </svg>
               </span>
             </span>
           </div>
-          <p v-if="signupInputError.name.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ signupInputError.name.errorMessage }}
-          </p>
         </div>
+
 
         <!-- Email -->
         <div class="space-y-1.5">
-          <label class="text-sm font-bold text-gray-700 ml-1">이메일</label>
-          <input v-model="signupForm.email" @blur="validateEmail" type="email" placeholder="workspace@example.com"
-            :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('email')]" />
-          <p v-if="signupInputError.email.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ signupInputError.email.errorMessage }}
-          </p>
-        </div>
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>이메일 </span>
+            <span v-if="signupInputError.email.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+              {{ signupInputError.email.errorMessage }}
+            </span>
+          </label>
 
-        <!-- Password -->
-        <div class="space-y-1.5">
-          <label class="text-sm font-bold text-gray-700 ml-1">비밀번호</label>
-          <input v-model="signupForm.password" @blur="validatePassword" type="password" placeholder="••••••••"
-            :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('password')]" />
-          <p v-if="signupInputError.password.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ signupInputError.password.errorMessage }}
-          </p>
+          <input
+            v-model="signupForm.email"
+            @blur="validateEmail"
+            type="email"
+            placeholder="workspace@example.com"
+            :class="[
+              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+              getInputClass('email')
+            ]"
+          />
         </div>
 
         <!-- Password Confirm -->
         <div class="space-y-1.5">
-          <label class="text-sm font-bold text-gray-700 ml-1">비밀번호 확인</label>
-          <input v-model="signupForm.passwordConfirm" @blur="validatePasswordConfirm" type="password"
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>비밀번호 </span>
+            <span v-if="signupInputError.password.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+              {{ signupInputError.password.errorMessage }}
+            </span>
+          </label>
+
+          <input
+            v-model="signupForm.password"
+            @blur="validatePassword"
+            type="password"
             placeholder="••••••••"
-            :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('passwordConfirm')]" />
-          <p v-if="signupInputError.passwordConfirm.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ signupInputError.passwordConfirm.errorMessage }}
-          </p>
+            :class="[
+              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+              getInputClass('password')
+            ]"
+          />
+        </div>  
+
+        <!-- Password Confirm -->
+        <div class="space-y-1.5">
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>비밀번호 확인</span>
+            <span v-if="signupInputError.passwordConfirm.errorMessage" class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down">
+              {{ signupInputError.passwordConfirm.errorMessage }}
+            </span>
+          </label>
+
+          <input
+            v-model="signupForm.passwordConfirm"
+            @blur="validatePasswordConfirm"
+            type="password"
+            placeholder="••••••••"
+            :class="[
+              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+              getInputClass('passwordConfirm')
+            ]"
+          />
         </div>
 
         <!-- Submit Button -->
