@@ -21,8 +21,8 @@ const goBack = () => {
       </div>
 
       <!-- 404 숫자 -->
-      <h1 class="text-[8rem] font-black bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] bg-clip-text text-transparent m-0 leading-none tracking-tighter">
-        404
+      <h1 class="text-[6rem] font-black bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] bg-clip-text text-transparent m-0 leading-none tracking-tighter">
+        404 Not Found
       </h1>
 
       <!-- 메시지 -->
