@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import {useAuthStore} from '@/stores/useAuthStore'
+import { useAuthStore } from '@/stores/useAuthStore'
 import ProfileModal from './ProfileModal.vue'
+
 
 const emit = defineEmits(['toggle-chat', 'toggle-theme', 'switch-view'])
 
@@ -54,7 +55,7 @@ const toggleProfileMenu = () => {
 // 테마 토글
 const handleToggleTheme = () => {
   isDarkMode.value = !isDarkMode.value
-  
+
   if (isDarkMode.value) {
     themeIcon.value = 'fa-solid fa-sun'
     document.documentElement.classList.add('dark')
@@ -64,7 +65,7 @@ const handleToggleTheme = () => {
     document.documentElement.classList.remove('dark')
     localStorage.setItem('theme', 'light')
   }
-  
+
   emit('toggle-theme', isDarkMode.value)
 }
 
@@ -103,10 +104,11 @@ const handleClickOutside = (event) => {
   }
 }
 
+
 onMounted(() => {
   // 테마 초기화
   initTheme()
-  
+
   if (authStore.data && authStore.data.userName) {
     userName.value = authStore.data.userName
   }
@@ -121,19 +123,11 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <!-- Profile Modal -->
-    <ProfileModal 
-      :isOpen="isProfileModalOpen"
-      @close="handleCloseProfileModal"
-      @save="handleSaveProfile"
-    />
+    <ProfileModal :isOpen="isProfileModalOpen" @close="handleCloseProfileModal" @save="handleSaveProfile" />
 
     <header class="header-container">
       <div class="flex-1 max-w-2xl relative group">
-        <input
-          type="text"
-          placeholder="파일, 폴더, 사람 검색"
-          class="search-input"
-        />
+        <input type="text" placeholder="파일, 폴더, 사람 검색" class="search-input" />
         <span class="absolute left-4 top-2.5 opacity-40">
           <i class="fa-solid fa-search"></i>
         </span>
@@ -142,13 +136,10 @@ onBeforeUnmount(() => {
       <div class="flex items-center gap-5 ml-6">
         <!-- 알림 버튼 -->
         <div class="relative" id="notif-container">
-          <button 
-            @click="toggleNotifMenu" 
-            class="icon-button"
-          >
+          <button @click="toggleNotifMenu" class="icon-button">
             <i class="fa-solid fa-bell"></i>
           </button>
-          
+
           <div v-if="showNotifDropdown" class="dropdown-container active">
             <div class="dropdown-header">
               <p class="text-sm font-bold">알림</p>
@@ -162,37 +153,24 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- 테마 토글 버튼 -->
-        <button 
-          @click="handleToggleTheme" 
-          class="icon-button theme-button"
-          :title="isDarkMode ? '라이트 모드로 변경' : '다크 모드로 변경'"
-        >
+        <button @click="handleToggleTheme" class="icon-button theme-button"
+          :title="isDarkMode ? '라이트 모드로 변경' : '다크 모드로 변경'">
           <i :class="themeIcon"></i>
         </button>
 
         <!-- 채팅 버튼 -->
-        <button 
-          @click="handleToggleChat" 
-          class="icon-button chat-button" 
-          title="협업채팅"
-        >
+        <button @click="handleToggleChat" class="icon-button chat-button" title="협업채팅">
           <i class="fa-solid fa-comments"></i>
         </button>
 
         <!-- 프로필 드롭다운 -->
         <div class="relative" id="profile-container">
-          <div 
-            @click="toggleProfileMenu" 
-            class="flex items-center gap-3 cursor-pointer group"
-          >
+          <div @click="toggleProfileMenu" class="flex items-center gap-3 cursor-pointer group">
             <div class="text-right hidden md:block">
               <p class="text-sm font-bold text-[var(--text-main)]">{{ userName || '뷰짱짱' }}</p>
               <p class="text-[10px] text-[#190094] dark:text-[#44dff4] font-bold">존나 비싼 요금제 오너</p>
             </div>
-            <img 
-              src="https://ui-avatars.com/api/?name=AB&background=190094&color=fff"
-              class="profile-avatar"
-            >
+            <img src="https://ui-avatars.com/api/?name=AB&background=190094&color=fff" class="profile-avatar">
           </div>
 
           <div v-if="showProfileDropdown" class="dropdown-container active">
@@ -376,6 +354,7 @@ onBeforeUnmount(() => {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

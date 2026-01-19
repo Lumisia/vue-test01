@@ -1,4 +1,4 @@
-import {api} from '@/plugins/axiosinterceptor'
+import { api } from '@/plugins/axiosinterceptor'
 
 const signup = async (req) => {
   const res = await api.post('/user/join', req)
@@ -12,4 +12,4 @@ const login = async (req) => {
   return res
 }
 
-export default { signup, login }
+export default { signup, login, profile }
