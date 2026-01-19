@@ -40,37 +40,62 @@ onMounted(() => {
     :style="{
       left: mouse.left + 'px',
       top: mouse.top + 'px',
+      '--mouse-color': mouse.color // CSS 변수로 색상 전달
     }"
   >
-    <div class="mouse-pointer" :style="{ backgroundColor: mouse.color }"></div>
-    <div class="mouse-name" :style="{ backgroundColor: mouse.color }">{{ mouse.name }}</div>
+  <svg
+      class="mouse-pointer"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19011L11.7116 12.3673H5.65376Z"
+        fill="var(--mouse-color)"
+        stroke="white"
+        stroke-width="1"
+      />
+    </svg>
+    
+    <div class="mouse-name">
+      {{ mouse.name }}
+    </div>
   </div>
 </template>
 
 <style scoped>
+/* 마우스 전체 컨테이너 */
 .mouse {
   position: fixed;
   pointer-events: none;
   z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.1s ease-out; /* 움직임을 부드럽게 */
-}
-.mouse-pointer {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 12px solid; /* 색상은 인라인 스타일로 결정 */
+  top: 0;
+  left: 0;
+  transition: all 0.1s ease-out; /* 부드러운 움직임 */
+  will-change: left, top; /* 성능 최적화 */
 }
 
+/* 커서 (SVG) */
+.mouse-pointer {
+  /* SVG 자체에 색상과 테두리가 적용됨 */
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2)); /* 살짝 그림자 추가 */
+}
+
+/* 이름표 */
 .mouse-name {
-  padding: 2px 6px;
+  position: absolute;
+  top: 18px; /* 커서 아래쪽에 위치 */
+  left: 10px; /* 커서 오른쪽에 살짝 걸치게 */
+  background-color: var(--mouse-color);
   color: white;
-  font-size: 10px;
+  padding: 4px 8px;
   border-radius: 4px;
-  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
   white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .editor-paper {
