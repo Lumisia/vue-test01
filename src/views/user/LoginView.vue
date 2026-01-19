@@ -62,12 +62,10 @@ const handleLogin = async () => {
     if (res.status === 200) {
       authStore.login(JSON.stringify(res.data))
       router.push({ name: 'main' })
-    } else {
-      loginErrorMessage.value = '아이디 또는 비밀번호가 일치하지 않습니다.'
-    }
+    } 
   }
   catch (error) {
-    loginErrorMessage.value = '서버와의 통신 중 오류가 발생했습니다.'
+    loginErrorMessage.value = '아이디 또는 비밀번호가 일치하지 않습니다.'
   } finally {
     isLoading.value = false
   }
