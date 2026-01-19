@@ -5,7 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'introduce',
+      name: 'intro',
       component: () => import('../views/IntroduceView.vue'),
       meta: { title: '소개 - FileInNOut', requiresAuth: false },
     },
