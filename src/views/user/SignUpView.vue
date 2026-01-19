@@ -95,7 +95,7 @@ const handleSignup = async () => {
 
   isLoading.value = true
   try {
-    const res = await api.signup(res.data)
+    const res = await api.signup(signupForm)
     signupSuccess.value = true
     router.push({ name: 'login' })
   } catch (error) {
