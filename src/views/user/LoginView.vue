@@ -78,7 +78,7 @@ const getInputClass = (field) => {
   const state = loginInputError[field]
   if (!state.touched) return 'border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20'
   return state.isValid
-    ? 'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-500/20'
+    ? 'border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20'
     : 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
 }
 </script>
