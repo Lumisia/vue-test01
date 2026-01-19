@@ -1,5 +1,10 @@
 <script setup>
+import { onMounted } from 'vue';
 
+onMounted (() => {
+  // 테마 초기화 및 적용
+  document.documentElement.classList.remove('dark')
+})
 </script>
 
 <template>
