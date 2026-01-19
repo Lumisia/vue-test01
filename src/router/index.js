@@ -81,6 +81,12 @@ const router = createRouter({
       name: 'pay',
       component: () => import('../views/Pay.vue'),
       meta: { title : '결제', requiresAuth: true }, // 부모가 true면 자식들도 영향을 받습니다.
+    },
+    { 
+      path: '/find_member',
+      name: 'find_member',
+      component: () => import('../views/user/Find_member.vue'),
+      meta: { title : '회원 찾기', requiresAuth: true }, // 부모가 true면 자식들도 영향을 받습니다.
     }
   ],
 })
