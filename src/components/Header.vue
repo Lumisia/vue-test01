@@ -274,7 +274,7 @@ onBeforeUnmount(() => {
 
 .theme-button:hover {
   color: var(--accent);
-  transform: rotate(20deg);
+  transform: rotate(360deg);
 }
 
 .chat-button:hover {
