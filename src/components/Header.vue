@@ -105,7 +105,8 @@ const handleSaveProfile = () => {
 // 로그아웃
 const handleLogout = () => {
   if (confirm("로그아웃 하시겠습니까?")) {
-    location.reload()
+    authStore.logout() // 스토어에서 만든 logout 함수 호출 (이전 가이드 참고)
+    router.push('/login') // 로그인 페이지로 이동
   }
 }
 
