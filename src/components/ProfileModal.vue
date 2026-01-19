@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/useAuthStore' // 경로 확인 필요
 
+const authStore = useAuthStore()
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -22,10 +24,39 @@ const tabs = [
 ]
 
 const profile = ref({
-  name: 'Imran Khan',
-  role: 'Senior Product Designer',
-  email: 'imran_khan@cloudflow.com'
+  name: '',
+  role: '사용자',
+  email: ''
 })
+
+// 데이터를 가져와서 profile에 넣어주는 함수
+const syncProfile = () => {
+  if (authStore.user) {
+    console.log('현재 스토어 유저 정보:', authStore.user); // 콘솔에서 키값을 확인해보세요!
+    profile.value = {
+      name: authStore.user.name || authStore.user.userName || '', // 두 경우 모두 대비
+      role: authStore.user.role || '사용자',
+      email: authStore.user.email || ''
+    }
+  }
+}
+
+// 1. 컴포넌트 마운트 시 실행
+onMounted(() => {
+  authStore.checkLogin()
+  syncProfile()
+})
+
+// 2. 모달이 열릴 때마다 실행
+watch(() => props.isOpen, (isOpen) => {
+  if (isOpen) syncProfile()
+})
+
+// 3. 스토어 유저 정보가 바뀔 때 실행
+watch(() => authStore.user, () => {
+  syncProfile()
+}, { deep: true })
+
 
 const preferences = ref({
   marketing: true,
@@ -83,34 +114,28 @@ const handleSave = () => {
           <!-- Tab: Basic Profile -->
           <div v-if="activeTab === 'profile'" class="modal-tab-pane active max-w-2xl mx-auto space-y-10">
             <section>
-              <h3 class="text-sm font-black text-[var(--text-muted)] uppercase tracking-widest mb-6">프로필 이미지</h3>
-              <div class="flex items-center gap-8">
-                <div class="relative group cursor-pointer">
-                  <img 
-                    src="https://ui-avatars.com/api/?name=AB&background=4cd5ff&color=fff"
-                    class="w-28 h-28 rounded-3xl shadow-2xl border-2 border-[var(--border-color)] transition-transform group-hover:scale-[1.02]"
-                  >
-                  <div class="absolute inset-0 bg-black/40 rounded-3xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <i class="fa-solid fa-camera text-white text-xl"></i>
-                  </div>
-                </div>
-                <div class="space-y-3">
-                  <div class="flex items-center gap-2">
-                    <span class="px-2 py-1 bg-gray-500/20 text-blue-500 text-[10px] font-black rounded uppercase">PRO 멤버십</span>
-                    <span class="text-[11px] text-[var(--text-muted)]">가입일: 2023.10.15</span>
-                  </div>
-                  <p class="text-sm text-[var(--text-muted)]">정사각형 이미지를 권장합니다. (JPG, PNG)</p>
-                  <div class="flex gap-2">
-                    <button class="px-4 py-2 bg-[var(--bg-input)] rounded-xl text-xs font-bold hover:bg-[var(--border-color)] transition-colors">
-                      이미지 업로드
-                    </button>
-                    <button class="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-colors">
-                      기본값으로 변경
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </section>
+  <h3 class="text-sm font-black text-[var(--text-muted)] uppercase tracking-widest mb-6">프로필 이미지</h3>
+  <div class="flex items-center gap-8">
+    <div class="relative group cursor-pointer">
+      <img 
+        :src="`https://ui-avatars.com/api/?name=${profile.name}&background=4cd5ff&color=fff`"
+        class="w-28 h-28 rounded-3xl shadow-2xl border-2 border-[var(--border-color)] transition-transform group-hover:scale-[1.02]"
+      >
+      <div class="absolute inset-0 bg-black/40 rounded-3xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <i class="fa-solid fa-camera text-white text-xl"></i>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 bg-gray-500/20 text-blue-500 text-[10px] font-black rounded uppercase">
+          {{ authStore.user?.grade || 'FREE MEMBER' }}
+        </span>
+        <span class="text-[11px] text-[var(--text-muted)]">가입일: 2023.10.15</span>
+      </div>
+      <p class="text-sm text-[var(--text-muted)]">정사각형 이미지를 권장합니다. (JPG, PNG)</p>
+      </div>
+  </div>
+</section>
 
             <hr class="border-[var(--border-color)]">
 
