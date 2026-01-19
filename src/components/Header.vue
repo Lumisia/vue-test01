@@ -270,15 +270,17 @@ onBeforeUnmount(() => {
 .icon-button:hover {
   color: var(--text-main);
   background-color: var(--bg-input);
+  transform: rotate(180deg);
 }
 
 .theme-button:hover {
   color: var(--accent);
-  transform: rotate(360deg);
+  transform: rotate(180deg);
 }
 
 .chat-button:hover {
   color: #6366f1;
+  transform: rotate(180deg);
 }
 
 /* 프로필 아바타 */
