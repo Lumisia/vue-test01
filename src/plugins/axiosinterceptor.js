@@ -48,4 +48,4 @@ api.interceptors.response.use(
 //   }
 // }
 
-export default { postApi }
+export default { api, postApi }
