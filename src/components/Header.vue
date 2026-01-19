@@ -183,9 +183,13 @@ onBeforeUnmount(() => {
           <div @click="toggleProfileMenu" class="flex items-center gap-3 cursor-pointer group">
             <div class="text-right hidden md:block">
               <p class="text-sm font-bold text-[var(--text-main)]">{{ userName }}</p>
-              <p class="text-[10px] text-[#190094] dark:text-[#44dff4] font-bold">존나 비싼 요금제 오너</p>
+              <p class="text-[10px] text-[#190094] dark:text-[#44dff4] font-bold">비싼 요금제 오너</p>
             </div>
-            <img src="https://ui-avatars.com/api/?name=AB&background=190094&color=fff" class="profile-avatar">
+            <img 
+      :src="`https://ui-avatars.com/api/?name=${userName}&background=190094&color=fff&bold=true`" 
+      class="profile-avatar"
+      :alt="userName"
+    >
           </div>
 
           <div v-if="showProfileDropdown" class="dropdown-container active">
