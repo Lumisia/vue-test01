@@ -92,7 +92,7 @@ const downloadFile = (filename) => {
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> 
     </div>
 
     <!-- 그리드 뷰 -->
