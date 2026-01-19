@@ -121,6 +121,8 @@ const scrollToTop = () => {
           </div>
         </div>
         
+        <div class="divider"></div>
+        
         <RouterLink
           :to="{ name: 'trash' }"
           class="nav-link"
