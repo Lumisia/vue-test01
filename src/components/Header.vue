@@ -270,6 +270,7 @@ onBeforeUnmount(() => {
 .icon-button:hover {
   color: var(--text-main);
   background-color: var(--bg-input);
+  transform: rotate(360deg);
 }
 
 .theme-button:hover {
@@ -279,6 +280,7 @@ onBeforeUnmount(() => {
 
 .chat-button:hover {
   color: #6366f1;
+  transform: rotate(360deg);
 }
 
 /* 프로필 아바타 */
