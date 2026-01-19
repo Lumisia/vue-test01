@@ -131,28 +131,60 @@ const getInputClass = (field) => {
       <form @submit.prevent="handleLogin" class="space-y-5" novalidate>
         <!-- Email -->
         <div class="space-y-1.5">
-          <label class="text-sm font-bold text-gray-700 ml-1">이메일</label>
-          <input v-model="loginForm.email" @blur="validateEmail" type="email" placeholder="workspace@example.com"
-            :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('email')]" />
-          <p v-if="loginInputError.email.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ loginInputError.email.errorMessage }}
-          </p>
+          <!-- label + error 한 줄 -->
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>이메일</span>
+
+            <span
+              v-if="loginInputError.email.errorMessage"
+              class="ml-auto text-rose-500 text-[11px] font-bold animate-slide-down"
+            >
+              {{ loginInputError.email.errorMessage }}
+            </span>
+          </label>
+
+          <input
+            v-model="loginForm.email"
+            @blur="validateEmail"
+            type="email"
+            placeholder="workspace@example.com"
+            :class="[
+              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+              getInputClass('email')
+            ]"
+          />
         </div>
+
 
         <!-- Password -->
         <div class="space-y-1.5">
-          <div class="flex justify-between items-center ml-1">
-            <label class="text-sm font-bold text-gray-700">비밀번호</label>
-            <a href="#" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-700">비밀번호 찾기</a>
-          </div>
-          <input v-model="loginForm.password" @blur="validatePassword" type="password" placeholder="••••••••"
-            :class="['w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4', getInputClass('password')]" />
-          <p v-if="loginInputError.password.errorMessage"
-            class="text-rose-500 text-[11px] font-bold ml-1 animate-slide-down">
-            {{ loginInputError.password.errorMessage }}
-          </p>
+          <!-- label / error / find-password 한 줄 -->
+          <label class="flex items-center text-sm font-bold text-gray-700 ml-1">
+            <span>비밀번호</span>
+
+            <!-- 에러 메시지 -->
+            <span
+              v-if="loginInputError.password.errorMessage"
+              class="ml-auto mr-3 text-rose-500 text-[11px] font-bold animate-slide-down"
+            >
+              {{ loginInputError.password.errorMessage }}
+            </span>
+
+            
+          </label>
+
+          <input
+            v-model="loginForm.password"
+            @blur="validatePassword"
+            type="password"
+            placeholder="••••••••"
+            :class="[
+              'w-full bg-gray-50 border-2 rounded-xl px-4 py-3.5 text-sm transition-all outline-none focus:ring-4',
+              getInputClass('password')
+            ]"
+          />
         </div>
+
 
         <!-- Login Error Message -->
         <div v-if="loginErrorMessage"
@@ -189,6 +221,15 @@ const getInputClass = (field) => {
           아직 회원이 아니신가요?
           <RouterLink to="/signup" class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors">회원가입
           </RouterLink>
+        </p>
+        <p class="text-sm text-gray-500 font-medium">
+          아니면 비밀번호를 잊으셨나요?
+            <a
+              href="#"
+              class="text-indigo-600 hover:text-indigo-700 font-bold ml-1 transition-colors"
+            >
+              비밀번호 찾기
+            </a>
         </p>
       </div>
     </div>
