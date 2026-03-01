@@ -72,10 +72,10 @@ const router = createRouter({
           meta: { title: '저장용량', requiresAuth: true },
         },
         { 
-          path: 'editor', 
-          name: 'editor',
-          component: () => import('../views/EditorView.vue'),
-          meta: { title: '에디터', requiresAuth: true }
+          path: 'workspace', 
+          name: 'workspace',
+          component: () => import('../views/workspace/WorkspaceView.vue'),
+          meta: { title: '워크스페이스', requiresAuth: true }
         },
         // /main/* 하위의 잘못된 경로도 404로 보내기
         {
